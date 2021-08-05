@@ -1,0 +1,63 @@
+baseURL = "https://www.pigaunt.top"
+languageCode = "zh-CN"
+title = "PigAunt的博客"
+theme = "maupassant"
+googleAnalytics = ""  # UA-XXXXXXXX-X
+
+## 保持分类的原始名字（false会做转小写处理）
+preserveTaxonomyNames = true
+## 是否禁止URL Path转小写
+disablePathToLower = true
+
+hasCJKLanguage = true
+summaryLength = 140
+
+[author]
+  name = "PigAunt"
+
+[params]
+  author = "PigAunt"
+  subtitle = "Hello, World!"
+  keywords = "C++,OI,C#"
+  description = "PigAunt的博客"
+  busuanzi = true #启用不算子网页统计
+  googleAd = ""  #ca-pub-xxxxxxxxxxxxxx
+  localSearch = true # 启用本地搜索
+
+  customCSS = ['douban.css', 'other.css']
+  # if ['custom.css'], load '/static/css/custom.css' file
+  customJS = ['douban.js']
+  # if ['custom.js'], load '/static/js/custom.js' file
+
+  # 全局开关，你也可以在每一篇内容的 front matter 中针对单篇内容关闭或开启某些功能
+  toc = false  # 是否开启目录
+
+## 友情链接，可以多个
+[[params.links]]
+  title = "RuSun的博客"
+  name = "RuSun的博客"
+  url = "https://rusun.blog.luogu.org/"
+
+## 开启版权声明，协议名字和链接都可以换
+[params.cc]
+  name = "知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议"
+  ink = "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+
+## 配置代码高亮
+[markup]
+  [markup.highlight]
+    lineNos = true
+    style = "github"
+
+## 配置网站菜单
+[menu]
+  [[menu.main]]
+    identifier = "archives"
+    name = "归档"
+    url = "/archives/"
+    weight = 1
+   [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 2
