@@ -1,0 +1,527 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><title>| PigAunt的博客</title><meta property="og:title" content=" - PigAunt的博客"><meta property="og:type" content="article"><meta name=Keywords content="C++,OI,C#"><meta name=description content><meta name=author content="PigAunt"><meta property="og:url" content="https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/"><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=stylesheet href=/css/normalize.css><link rel=stylesheet href=/css/style.css><script type=text/javascript src=//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js></script><link rel=stylesheet href=/css/douban.css><link rel=stylesheet href=/css/other.css></head><body><header id=header class=clearfix><div class=container><div class=col-group><div class=site-name><a id=logo href=https://www.pigaunt.top>PigAunt的博客</a><p class=description>Hello, World!</p></div><div><nav id=nav-menu class=clearfix><a class=current href=https://www.pigaunt.top>首页</a>
+<a href=https://www.pigaunt.top/archives/ title=归档>归档</a>
+<a href=https://www.pigaunt.top/about/ title=关于>关于</a></nav></div></div></div></header><div id=body><div class=container><div class=col-group><div class=col-8 id=main><div class=res-cons><article class=post><header><h1 class=post-title></h1></header><date class="post-meta meta-date">1年1月1日</date><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
+阅读</span></span></div><div class=post-content><p>title: &ldquo;背包问题&rdquo;
+date: 2021-08-11T10:50:50+08:00</p><p>tags : [
+&ldquo;动态规划&rdquo;
+]</p><p>categories: [
+&ldquo;动态规划&rdquo;
+]</p><h1 id=背包问题>背包问题</h1><h2 id=01背包>01背包</h2><p>现在有一个固定容量的背包，和若干体积一定、价值一定的物品，要将一些物品放入背包中，并获得最大的价值。</p><p>如果我们已经有了一个装有最大价值物品的背包，要对它进行扩容，并装入体积为$v_i$，价值为$w_i$的物品，此时最大价值就是原来的价值加上新增物品的价值。如果用$f_{i, j}$表示选到第$i$个物品，总体积为$j$，依照这个思路写出的转移方程如下：</p><p>$$
+f_{i, j} = f_{i - 1, j} \<br>f_{i, j} = \max(f_{i - 1, j - v_i} + w_i)
+$$</p><h3 id=恰好和不超过>恰好和不超过</h3><p>其实认真想想，不管$j$是指“恰好”还是“不超过”，转移方程是不变的。但要注意在初始化的时候，“恰好”型需要将$f_0$外的$f$数组初始化为$-\infty$</p><h3 id=空间优化>空间优化</h3><p>可以发现，$f_{i, j}$由$f_{i - 1, j}$和$f_{i - 1, j - v_i} + w_i$递推而来，只跟上一个状态有关，因此可以将$O(NM)$的空间复杂度优化至$O(M)$，只需要控制倒序循环（先更新大的，保证不会让新的去更新新的）即可。</p><h3 id=时间优化>时间优化</h3><p>因为该问题不受后面信息的影响，可以在读入时直接开始递推。</p><p>模板代码如下：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic></span>
+<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1005</span>, V <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1005</span>;
+
+<span style=color:#458;font-weight:700>int</span> n, v;
+<span style=color:#458;font-weight:700>int</span> itemSpace[N], itemWeight[N];
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>SinglePack</span>()
+{
+	<span style=color:#458;font-weight:700>int</span> d[N][V];
+	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; i <span style=color:#000;font-weight:700>&lt;</span> N; i<span style=color:#000;font-weight:700>++</span>)
+		<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; j <span style=color:#000;font-weight:700>&lt;</span> V; j<span style=color:#000;font-weight:700>++</span>)
+			d[i][j] <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>;
+	
+	<span style=color:#998;font-style:italic>// subsets of d[i, j]: a. has i; b. without i (d[i - 1, j]).
+</span><span style=color:#998;font-style:italic></span>	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+	{
+		<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; j <span style=color:#000;font-weight:700>&lt;=</span> v; j<span style=color:#000;font-weight:700>++</span>)
+		{
+			d[i][j] <span style=color:#000;font-weight:700>=</span> d[i <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][j];
+			<span style=color:#000;font-weight:700>if</span> (itemSpace[i] <span style=color:#000;font-weight:700>&lt;=</span> j)
+				d[i][j] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(d[i][j], 
+					d[i <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][j <span style=color:#000;font-weight:700>-</span> itemSpace[i]] <span style=color:#000;font-weight:700>+</span> itemWeight[i]);
+		}
+	}
+	
+	<span style=color:#000;font-weight:700>return</span> d[n][v];
+}
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>SinglePackOptimized</span>()
+{
+	<span style=color:#458;font-weight:700>int</span> d[V];
+	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; i <span style=color:#000;font-weight:700>&lt;</span> V; i<span style=color:#000;font-weight:700>++</span>)
+			d[i] <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>;
+	
+	<span style=color:#998;font-style:italic>// subsets of d[i, j]: a. has i; b. without i (d[i - 1, j]).
+</span><span style=color:#998;font-style:italic></span>	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+	{
+		<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> v; j <span style=color:#000;font-weight:700>&gt;=</span> itemSpace[i]; j<span style=color:#000;font-weight:700>--</span>)
+		{
+			d[j] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(d[j], d[j <span style=color:#000;font-weight:700>-</span> itemSpace[i]] <span style=color:#000;font-weight:700>+</span> itemWeight[i]);
+		}
+	}
+	
+	<span style=color:#000;font-weight:700>return</span> d[v];
+}
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+{
+	std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n <span style=color:#000;font-weight:700>&gt;&gt;</span> v;
+	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+		std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> itemSpace[i] <span style=color:#000;font-weight:700>&gt;&gt;</span> itemWeight[i];
+	
+	std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> SinglePack() <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
+	<span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+}
+</code></pre></td></tr></table></div></div><h2 id=完全背包>完全背包</h2><p>和01背包类似，只是物品的数量变成了无限个。</p><p>由于物品由无限个，此时当前状态可以用于更新当前状态，因此将循环顺序改为从小到大即可。</p><h3 id=为什么不需要考虑物品的数量>为什么不需要考虑物品的数量</h3><p>显然，考虑物品的数量可以正确解决问题，但时间复杂度升至$O(NM^2)$，实在是太慢了。</p><p>如果第$i$个物品可以装$s_i$个，那么$f_{i, j}$和$f_{i, j - v_i}$可以这样转移:</p><p>$$
+f_{i, j} = \max(f_{i - 1, j}, f_{i - 1, j - v_i} + w_i, f_{i - 1, j - 2v_i} + 2w_i, \dots, f_{i - 1, j - s_i v_i} + s_i w_i)
+$$
+$$
+f_{i, j - v_i} = \max(f_{i - 1, j - v_i}, f_{i - 1, j - 2v_i} + w_i, f_{i - 1, j - 3v_i} + 2w_i, \dots, f_{i - 1, j - s_i v_i} + (s_i - 1)w_i)
+$$</p><p>发现$f_{i, j - v_i} + w_i$其实就是$f_{i, j}$转移中$f_{i - 1, j}$后面所有项的最大值，因此转移方程简化如下：</p><p>$$
+f_{i, j} = \max(f_{i - 1, j}, f_{i, j - v_i} + w_i)
+$$</p><p>再应用上面提到的空间优化，得到下面的代码</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">64
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">65
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">66
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">67
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">68
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">69
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">70
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">71
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">72
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">73
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">74
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">75
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">76
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">77
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">78
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">79
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic></span>
+<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1005</span>, V <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1005</span>;
+
+<span style=color:#458;font-weight:700>int</span> n, v;
+<span style=color:#458;font-weight:700>int</span> itemSpace[N], itemWeight[N];
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>FullPack</span>()
+{
+	<span style=color:#458;font-weight:700>int</span> d[N][V];
+	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; i <span style=color:#000;font-weight:700>&lt;</span> N; i<span style=color:#000;font-weight:700>++</span>)
+		<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; j <span style=color:#000;font-weight:700>&lt;</span> V; j<span style=color:#000;font-weight:700>++</span>)
+			d[i][j] <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>;
+	
+	<span style=color:#998;font-style:italic>// subsets of d[i, j]: a. has i; b. without i (d[i - 1, j]).
+</span><span style=color:#998;font-style:italic></span>	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+	{
+		<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> itemSpace[i]; j <span style=color:#000;font-weight:700>&lt;=</span> v; j<span style=color:#000;font-weight:700>++</span>)
+		{
+			<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> k <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; k <span style=color:#000;font-weight:700>*</span> itemSpace[i] <span style=color:#000;font-weight:700>&lt;=</span> j; k<span style=color:#000;font-weight:700>++</span>)
+			{
+				d[i][j] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(d[i][j], 
+					d[i][j <span style=color:#000;font-weight:700>-</span> k <span style=color:#000;font-weight:700>*</span> itemSpace[i]] <span style=color:#000;font-weight:700>+</span> k <span style=color:#000;font-weight:700>*</span> itemWeight[i]);
+			}
+		}
+	}
+	
+	<span style=color:#000;font-weight:700>return</span> d[n][v];
+}
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>FullPackOptimized</span>()
+{
+	<span style=color:#458;font-weight:700>int</span> d[N][V];
+	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; i <span style=color:#000;font-weight:700>&lt;</span> N; i<span style=color:#000;font-weight:700>++</span>)
+		<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; j <span style=color:#000;font-weight:700>&lt;</span> V; j<span style=color:#000;font-weight:700>++</span>)
+			d[i][j] <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>;
+	
+	<span style=color:#998;font-style:italic>// subsets of d[i, j]: a. has i; b. without i (d[i - 1, j]).
+</span><span style=color:#998;font-style:italic></span>	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+	{
+		<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; j <span style=color:#000;font-weight:700>&lt;=</span> v; j<span style=color:#000;font-weight:700>++</span>)
+		{
+			d[i][j] <span style=color:#000;font-weight:700>=</span> d[i <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][j];
+			<span style=color:#000;font-weight:700>if</span> (itemSpace[i] <span style=color:#000;font-weight:700>&lt;=</span> j)
+				d[i][j] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(d[i][j], 
+					d[i][j <span style=color:#000;font-weight:700>-</span> itemSpace[i]] <span style=color:#000;font-weight:700>+</span> itemWeight[i]);
+		}
+	}
+	
+	<span style=color:#000;font-weight:700>return</span> d[n][v];
+}
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>FullPackFullOptimized</span>()
+{
+	<span style=color:#458;font-weight:700>int</span> d[V];
+	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; i <span style=color:#000;font-weight:700>&lt;</span> V; i<span style=color:#000;font-weight:700>++</span>)
+			d[i] <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>;
+	
+	<span style=color:#998;font-style:italic>// subsets of d[i, j]: a. has i; b. without i (d[i - 1, j]).
+</span><span style=color:#998;font-style:italic></span>	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+	{
+		<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> itemSpace[i]; j <span style=color:#000;font-weight:700>&lt;=</span> v; j<span style=color:#000;font-weight:700>++</span>)
+		{
+			d[j] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(d[j], d[j <span style=color:#000;font-weight:700>-</span> itemSpace[i]] <span style=color:#000;font-weight:700>+</span> itemWeight[i]);
+		}
+	}
+	
+	<span style=color:#000;font-weight:700>return</span> d[v];
+}
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+{
+	std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n <span style=color:#000;font-weight:700>&gt;&gt;</span> v;
+	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+		std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> itemSpace[i] <span style=color:#000;font-weight:700>&gt;&gt;</span> itemWeight[i];
+	
+	std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> FullPackOptimized() <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
+	<span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+}
+</code></pre></td></tr></table></div></div><h2 id=多重背包>多重背包</h2><p>多重背包与完全背包类似，但限定了每种物品的数量。</p><p>首先这个问题可以用完全背包优化前的算法，但时间复杂度太高，我们可以考虑用二进制拼凑思想优化，即把多个物品合并成由2的非负整数次幂的几个物品组，然后做01背包，时间复杂度$O(M \log N)$</p><p>可以用优化完全背包的方式优化多重背包吗？我们尝试写出$f_{i, j}$到$f_{i, j - s_i v_ i}$的转移方程：</p><p>$$
+f_{i, j} = \max(f_{i - 1, j}, f_{i - 1, j - v} + w, \dots, f_{i - 1, j - s_i v_i} + s_i w_i)
+$$
+$$
+f_{i, j - v} = \max(f_{i - 1, j - v}, f_{i - 1, j - 2v} + w, \dots, f_{i - 1, j - (s_i + 1)v_i} + s_i w_i)
+$$</p><p>发现$f_{i, j - v} + w$并不能像完全背包一样对齐，而是少了$f_{i - 1, j}$，多出了$f_{i - 1, j - (s_i + 1)v_i} + (s_i + 1)w_i$。以此类推，在不出边界的情况下，之后的$f_{i - 1, j - 2v}$直到$f_{i - 1, j - s_i v_i}$都是如此，就像是一个长度为$s$的窗口滑出。因此，要求每一个状态的最大值，只需要求它前面滑动窗口中状态的最大值。</p><p>要求滑动窗口的最大值，可以用单调队列。</p><h2 id=几个问题优化方式的联系>几个问题优化方式的联系</h2><p>我们发现，完全背包和多重背包优化的关键都在于把一类数的特征由一个数或一个更快找出这个特征的数据结构中的数等价替换。</p><h2 id=背包问题简单变形>背包问题简单变形</h2><h3 id=多维费用>多维费用</h3><p><a href=http://noi.openjudge.cn/ch0206/4978/>CH0206-4978-宠物小精灵之收服</a></p><p>这个题就是典型的二维费用的背包问题，状态定义只需要增加一维表示第二种费用。但本题要注意，“当皮卡丘的体力小于等于0时，小智就必须结束狩猎（因为他需要给皮卡丘疗伤），而使得皮卡丘体力小于等于0的野生小精灵也不会被小智收服”，所以答案不是$f_{n, m}$而是$f_{n, m - 1}$，有些题库，包括我校校内题库，没有考虑这一点，导致正解不能AC。</p><p>AC代码：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic></span>
+<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1005</span>, M <span style=color:#000;font-weight:700>=</span> <span style=color:#099>505</span>;
+
+<span style=color:#458;font-weight:700>int</span> n, m, k;
+<span style=color:#458;font-weight:700>int</span> f[N][M];
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+{
+    std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n <span style=color:#000;font-weight:700>&gt;&gt;</span> m <span style=color:#000;font-weight:700>&gt;&gt;</span> k;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> k; i<span style=color:#000;font-weight:700>++</span>)
+    {
+        <span style=color:#458;font-weight:700>int</span> ball, hp;
+        std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> ball <span style=color:#000;font-weight:700>&gt;&gt;</span> hp;
+        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> n; j <span style=color:#000;font-weight:700>&gt;=</span> ball; j<span style=color:#000;font-weight:700>--</span>)
+            <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> t <span style=color:#000;font-weight:700>=</span> m; t <span style=color:#000;font-weight:700>&gt;=</span> hp; t<span style=color:#000;font-weight:700>--</span>)
+                f[j][t] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(f[j][t], f[j <span style=color:#000;font-weight:700>-</span> ball][t <span style=color:#000;font-weight:700>-</span> hp] <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>);
+    }
+    
+    std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> f[n][m <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>] <span style=color:#000;font-weight:700>&lt;&lt;</span> <span style=color:#d14>&#34; &#34;</span>;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; i <span style=color:#000;font-weight:700>&lt;=</span> m; i<span style=color:#000;font-weight:700>++</span>)
+        <span style=color:#000;font-weight:700>if</span> (f[n][i] <span style=color:#000;font-weight:700>==</span> f[n][m <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>])
+        {
+            std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> m <span style=color:#000;font-weight:700>-</span> i <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
+            <span style=color:#000;font-weight:700>break</span>;
+        }
+    <span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+}
+</code></pre></td></tr></table></div></div><h3 id=多维价值>多维价值</h3><p>这个很少见，如果有要么考虑各种价值的优先级，要么考虑将多种价值转换为一种。</p><h2 id=分组背包>分组背包</h2><p>在01背包的基础上，将物品划为多个组，要求每组至多取一个物品，总价值的最大值。</p><p>要解决分组背包问题，只需要在状态定义中加一维，表示组数即可，但要注意控制循环层级，第一层为组数（可以看作物品，因为每组只选一个），第二层体积，第三层组中物品。</p><p>示例代码：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic></span>
+<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>105</span>, V <span style=color:#000;font-weight:700>=</span> <span style=color:#099>105</span>, S <span style=color:#000;font-weight:700>=</span> <span style=color:#099>105</span>;
+
+<span style=color:#458;font-weight:700>int</span> n, v, s[N];
+<span style=color:#458;font-weight:700>int</span> itemSpace[S][N], itemWeight[S][N];
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>GroupPackOptimized</span>()
+{
+	<span style=color:#458;font-weight:700>int</span> d[V];
+	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; i <span style=color:#000;font-weight:700>&lt;</span> V; i<span style=color:#000;font-weight:700>++</span>)
+			d[i] <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>;
+	
+	<span style=color:#998;font-style:italic>// subsets of d[i, j]: a. has i; b. without i (d[i - 1, j]).
+</span><span style=color:#998;font-style:italic></span>	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> g <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; g <span style=color:#000;font-weight:700>&lt;=</span> n; g<span style=color:#000;font-weight:700>++</span>)
+	{
+		<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> v; j <span style=color:#000;font-weight:700>&gt;=</span> <span style=color:#099>0</span>; j<span style=color:#000;font-weight:700>--</span>)
+		{
+			<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; i <span style=color:#000;font-weight:700>&lt;</span> s[g]; i<span style=color:#000;font-weight:700>++</span>)
+			{
+				<span style=color:#000;font-weight:700>if</span> (itemSpace[g][i] <span style=color:#000;font-weight:700>&lt;=</span> j)
+				d[j] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(d[j], d[j <span style=color:#000;font-weight:700>-</span> itemSpace[g][i]] <span style=color:#000;font-weight:700>+</span> itemWeight[g][i]);
+			}
+		}
+	}
+	
+	<span style=color:#000;font-weight:700>return</span> d[v];
+}
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+{
+	std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n <span style=color:#000;font-weight:700>&gt;&gt;</span> v;
+	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+	{
+		std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> s[i];
+		<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; j <span style=color:#000;font-weight:700>&lt;</span> s[i]; j<span style=color:#000;font-weight:700>++</span>)
+		{
+			std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> itemSpace[i][j] <span style=color:#000;font-weight:700>&gt;&gt;</span> itemWeight[i][j];
+		}
+	}
+	
+	std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> GroupPackOptimized() <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
+	<span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+}
+</code></pre></td></tr></table></div></div><h2 id=有依赖关系的背包问题>有依赖关系的背包问题</h2><p>这类问题有些可以通过转化成为分组背包问题，有一些只能通过树形动态规划解决。下面这一题可以转化为分组背包问题：</p><p><a href=https://www.luogu.com.cn/problem/P1064>洛谷-P1064-NOIP2006提高组 金明的预算方案</a></p><p>由于本题附件最多有两个，可以拆分成不同选法，放在一个组里。AC代码：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;vector&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic></span>
+<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>65</span>, M <span style=color:#000;font-weight:700>=</span> <span style=color:#099>32005</span>;
+
+<span style=color:#000;font-weight:700>struct</span> <span style=color:#458;font-weight:700>Item</span>
+{
+    Item(<span style=color:#458;font-weight:700>int</span> v, <span style=color:#458;font-weight:700>int</span> w) <span style=color:#000;font-weight:700>:</span> v(v), w(w) {}
+    <span style=color:#458;font-weight:700>int</span> v;
+    <span style=color:#458;font-weight:700>int</span> w;
+};
+
+<span style=color:#458;font-weight:700>int</span> m, n;
+std<span style=color:#000;font-weight:700>::</span>vector<span style=color:#000;font-weight:700>&lt;</span>Item<span style=color:#000;font-weight:700>&gt;</span> items[N];
+<span style=color:#458;font-weight:700>int</span> f[M];
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+{
+    std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> m <span style=color:#000;font-weight:700>&gt;&gt;</span> n;
+    <span style=color:#458;font-weight:700>int</span> v, w, dep;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+    {
+        std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> v <span style=color:#000;font-weight:700>&gt;&gt;</span> w <span style=color:#000;font-weight:700>&gt;&gt;</span> dep;
+
+        <span style=color:#458;font-weight:700>int</span> len <span style=color:#000;font-weight:700>=</span> items[dep].size();
+        <span style=color:#000;font-weight:700>if</span> (dep <span style=color:#000;font-weight:700>==</span> <span style=color:#099>0</span>)
+            items[i].push_back(Item(v, v <span style=color:#000;font-weight:700>*</span> w));
+        <span style=color:#000;font-weight:700>else</span>
+            <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; j <span style=color:#000;font-weight:700>&lt;</span> len; j<span style=color:#000;font-weight:700>++</span>)
+                items[dep].push_back(Item(items[dep][j].v <span style=color:#000;font-weight:700>+</span> v, items[dep][j].w <span style=color:#000;font-weight:700>+</span> v <span style=color:#000;font-weight:700>*</span> w));
+    }
+
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> m; j <span style=color:#000;font-weight:700>&gt;=</span> <span style=color:#099>0</span>; j<span style=color:#000;font-weight:700>--</span>)
+        {
+            <span style=color:#458;font-weight:700>int</span> len <span style=color:#000;font-weight:700>=</span> items[i].size();
+            <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> k <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; k <span style=color:#000;font-weight:700>&lt;</span> len; k<span style=color:#000;font-weight:700>++</span>)
+                <span style=color:#000;font-weight:700>if</span> (j <span style=color:#000;font-weight:700>-</span> items[i][k].v <span style=color:#000;font-weight:700>&gt;=</span> <span style=color:#099>0</span>)
+                    f[j] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(f[j], f[j <span style=color:#000;font-weight:700>-</span> items[i][k].v] <span style=color:#000;font-weight:700>+</span> items[i][k].w);
+        }
+
+    std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> f[m] <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
+    <span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+}
+</code></pre></td></tr></table></div></div><p>更复杂的情况需要考虑树形动态规划。</p></div><div class=post-archive><ul class=post-copyright><li><strong>原文作者：</strong><a rel=author href=https://www.pigaunt.top>PigAunt</a></li><li style=word-break:break-all><strong>原文链接：</strong><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/>https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/</a></li><li><strong>版权声明：</strong>本作品采用<a rel=license href>知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li></ul></div><br><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=/post/misc/hello-world/>Hello World</a></li><li><a href=/archives/>归档</a></li><li><a href=/search/>搜索</a></li><li><a href=/about/>关于</a></li><li><a href=/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E6%95%B0%E5%AD%97%E4%B8%89%E8%A7%92%E5%BD%A2/></a></li></ul></div><div class="post-meta meta-tags">没有标签</div></article></div><footer id=footer><div>&copy; 2021 <a href=https://www.pigaunt.top>PigAunt的博客 By PigAunt</a></div><br><div><div class=github-badge><a href=https://gohugo.io/ target=_black rel=nofollow><span class=badge-subject>Powered by</span><span class="badge-value bg-blue">Hugo</span></a></div><div class=github-badge><a href=https://www.flysnow.org/ target=_black><span class=badge-subject>Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a></div><div class=github-badge><a href=https://github.com/flysnow-org/maupassant-hugo target=_black><span class=badge-subject>Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a></div></div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[['$','$']],processEscapes:!0}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script><a id=rocket href=#top></a><script type=text/javascript src="/js/totop.js?v=0.0.0" async></script><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script><script src=/js/douban.js></script></div><div id=secondary><section class=widget><form id=search action=https://www.pigaunt.top/search/ method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
+<input type=hidden name=sitesearch value=https://www.pigaunt.top>
+<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=https://www.pigaunt.top/post/misc/hello-world/ title="Hello World">Hello World</a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LIS%E5%92%8CLCS/ title></a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%8C%BA%E9%97%B4%E5%9E%8B%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/ title></a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E6%95%B0%E5%AD%97%E4%B8%89%E8%A7%92%E5%BD%A2/ title></a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%8A%B6%E6%80%81%E6%9C%BA/ title></a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/ title></a></li></ul></section><section class=widget><h3 class=widget-title><a href=/categories/>分类</a></h3><ul class=widget-list><li><a href=https://www.pigaunt.top/categories/misc/>misc (1)</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/tags/>标签</a></h3><div class=tagcloud><a href=https://www.pigaunt.top/tags/misc/>misc</a></div></section><section class=widget><h3 class=widget-title>友情链接</h3><ul class=widget-list><li><a target=_blank href=https://rusun.blog.luogu.org/ title=RuSun的博客>RuSun的博客</a></li></ul></section><section class=widget><h3 class=widget-title>其它</h3><ul class=widget-list><li><a href=https://www.pigaunt.top/index.xml>文章 RSS</a></li></ul></section></div></div></div></div></body></html>

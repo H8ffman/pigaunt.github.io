@@ -1,0 +1,677 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content="no-referrer-when-downgrade"><title>| PigAunt的博客</title><meta property="og:title" content=" - PigAunt的博客"><meta property="og:type" content="article"><meta name=Keywords content="C++,OI,C#"><meta name=description content><meta name=author content="PigAunt"><meta property="og:url" content="https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%8C%BA%E9%97%B4%E5%9E%8B%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=stylesheet href=/css/normalize.css><link rel=stylesheet href=/css/style.css><script type=text/javascript src=//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js></script><link rel=stylesheet href=/css/douban.css><link rel=stylesheet href=/css/other.css></head><body><header id=header class=clearfix><div class=container><div class=col-group><div class=site-name><a id=logo href=https://www.pigaunt.top>PigAunt的博客</a><p class=description>Hello, World!</p></div><div><nav id=nav-menu class=clearfix><a class=current href=https://www.pigaunt.top>首页</a>
+<a href=https://www.pigaunt.top/archives/ title=归档>归档</a>
+<a href=https://www.pigaunt.top/about/ title=关于>关于</a></nav></div></div></div></header><div id=body><div class=container><div class=col-group><div class=col-8 id=main><div class=res-cons><article class=post><header><h1 class=post-title></h1></header><date class="post-meta meta-date">1年1月1日</date><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
+阅读</span></span></div><div class=post-content><p>title: &ldquo;区间型动态规划&rdquo;
+date: 2021-08-11T10:50:50+08:00</p><p>tags : [
+&ldquo;动态规划&rdquo;
+]</p><p>categories: [
+&ldquo;动态规划&rdquo;
+]</p><h1 id=区间型动态规划>区间型动态规划</h1><h2 id=石子合并问题>石子合并问题</h2><p>有若干个石子排成一行，每个石子有一定的质量，现在要将它们合并成一堆，每一次合并产生的价值是两堆石子的质量和（只能合并相邻的石子），求最大/最小价值。</p><p>以最小值为例，对于这个问题，如果我们用$f_{i, j}$表示从$i$到$j$的代价最小值，那么这一块区域可以被分割成两个小的区域，通过不断调整分割点，我们就可以找到$f_{i, j}$，转移方程如下：
+$$
+f_{i, j} = \min(f_{i, j}, f_{i, k} + f_{k + 1, j} + s[j] - s[i - 1]) (i \le k &lt; j)
+$$
+初始值：
+$$
+f_{i, i} = 0
+$$
+时间复杂度$O(n ^ 3)$。</p><p>如果石子排成了一个环呢？</p><h2 id=环形石子合并问题>环形石子合并问题</h2><p>一般来说，有下面几种转换方法：</p><ol><li>把环变成链，枚举那个缺口，时间复杂度$O(n ^ 4)$；</li><li>考虑到变成环之后，问题转换为求$n$条链上的石子合并问题，那么可以把长度为$n$的链拆开，复制一次，变成长度为$2n$的链，用石子合并的方法求出$f_{i, j}$后，求出$\min(f_{i, i + n - 1})$，时间复杂度$O(8n ^ 3)$；</li></ol><p>显然第二种更好。</p><p><a href=https://www.luogu.com.cn/problem/P1880>洛谷-P1880-[NOI1995] 石子合并</a></p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic></span>
+<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>205</span>, PosInf <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1e9</span>;
+
+<span style=color:#458;font-weight:700>int</span> n;
+<span style=color:#458;font-weight:700>int</span> a[N], s[N], f[N][N], g[N][N];
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+{
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; i <span style=color:#000;font-weight:700>&lt;</span> N; i<span style=color:#000;font-weight:700>++</span>)
+        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; j <span style=color:#000;font-weight:700>&lt;</span> N; j<span style=color:#000;font-weight:700>++</span>)
+        {
+            <span style=color:#000;font-weight:700>if</span> (i <span style=color:#000;font-weight:700>==</span> j)
+                f[i][i] <span style=color:#000;font-weight:700>=</span> g[i][i] <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>;
+            <span style=color:#000;font-weight:700>else</span>
+            {
+                f[i][j] <span style=color:#000;font-weight:700>=</span> PosInf;
+                g[i][j] <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>-</span>PosInf;
+            }
+        }
+
+    std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+    {
+        std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> a[i];
+        a[i <span style=color:#000;font-weight:700>+</span> n] <span style=color:#000;font-weight:700>=</span> a[i];
+    }
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n <span style=color:#000;font-weight:700>*</span> <span style=color:#099>2</span>; i<span style=color:#000;font-weight:700>++</span>)
+        s[i] <span style=color:#000;font-weight:700>=</span> s[i <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>] <span style=color:#000;font-weight:700>+</span> a[i];
+
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> len <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; len <span style=color:#000;font-weight:700>&lt;=</span> n; len<span style=color:#000;font-weight:700>++</span>)
+        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> l <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; l <span style=color:#000;font-weight:700>+</span> len <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span> <span style=color:#000;font-weight:700>&lt;=</span> n <span style=color:#000;font-weight:700>*</span> <span style=color:#099>2</span>; l<span style=color:#000;font-weight:700>++</span>)
+        {
+            <span style=color:#458;font-weight:700>int</span> r <span style=color:#000;font-weight:700>=</span> l <span style=color:#000;font-weight:700>+</span> len <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>;
+            <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> k <span style=color:#000;font-weight:700>=</span> l; k <span style=color:#000;font-weight:700>&lt;</span> r; k<span style=color:#000;font-weight:700>++</span>)
+            {
+                f[l][r] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>min(f[l][r], f[l][k] <span style=color:#000;font-weight:700>+</span> f[k <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>][r] <span style=color:#000;font-weight:700>+</span> s[r] <span style=color:#000;font-weight:700>-</span> s[l <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>]);
+                g[l][r] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(g[l][r], g[l][k] <span style=color:#000;font-weight:700>+</span> g[k <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>][r] <span style=color:#000;font-weight:700>+</span> s[r] <span style=color:#000;font-weight:700>-</span> s[l <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>]);
+            }
+        }
+
+    <span style=color:#458;font-weight:700>int</span> wMin <span style=color:#000;font-weight:700>=</span> PosInf, wMax <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>-</span>PosInf;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> l <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; l <span style=color:#000;font-weight:700>&lt;=</span> n; l<span style=color:#000;font-weight:700>++</span>)
+    {
+        wMin <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>min(wMin, f[l][l <span style=color:#000;font-weight:700>+</span> n <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>]);
+        wMax <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(wMax, g[l][l <span style=color:#000;font-weight:700>+</span> n <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>]);
+    }
+    std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> wMin <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
+    std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> wMax <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
+    <span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+}
+</code></pre></td></tr></table></div></div><h3 id=问题拓展>问题拓展</h3><p><a href=https://www.acwing.com/problem/content/322/>AcWing-320-能量项链</a></p><p>本题和前面的合并略有不同，待合并的两个区间不是由点构成，而是由点与点之间的空隙构成。因此区间长度至少是3，至多是$n + 1$，且断点$k$不能和左端点相等。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic></span>
+<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>205</span>, PosInf <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1e9</span>;
+
+<span style=color:#458;font-weight:700>int</span> n;
+<span style=color:#458;font-weight:700>int</span> a[N], f[N][N];
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+{
+    std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+    {
+        std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> a[i];
+        a[i <span style=color:#000;font-weight:700>+</span> n] <span style=color:#000;font-weight:700>=</span> a[i];
+    }
+
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> len <span style=color:#000;font-weight:700>=</span> <span style=color:#099>3</span>; len <span style=color:#000;font-weight:700>&lt;=</span> n <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>; len<span style=color:#000;font-weight:700>++</span>)
+        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> l <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; l <span style=color:#000;font-weight:700>+</span> len <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span> <span style=color:#000;font-weight:700>&lt;=</span> n <span style=color:#000;font-weight:700>*</span> <span style=color:#099>2</span>; l<span style=color:#000;font-weight:700>++</span>)
+        {
+            <span style=color:#458;font-weight:700>int</span> r <span style=color:#000;font-weight:700>=</span> l <span style=color:#000;font-weight:700>+</span> len <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>;
+            <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> k <span style=color:#000;font-weight:700>=</span> l <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>; k <span style=color:#000;font-weight:700>&lt;</span> r; k<span style=color:#000;font-weight:700>++</span>)
+                f[l][r] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(f[l][r], f[l][k] <span style=color:#000;font-weight:700>+</span> f[k][r] <span style=color:#000;font-weight:700>+</span> a[l] <span style=color:#000;font-weight:700>*</span> a[k] <span style=color:#000;font-weight:700>*</span> a[r]);
+        }
+
+    <span style=color:#458;font-weight:700>int</span> wMax <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>-</span>PosInf;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> l <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; l <span style=color:#000;font-weight:700>&lt;=</span> n; l<span style=color:#000;font-weight:700>++</span>)
+        wMax <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(wMax, f[l][l <span style=color:#000;font-weight:700>+</span> n]);
+    std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> wMax <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
+    <span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+}
+</code></pre></td></tr></table></div></div><p><a href=https://loj.ac/p/10149>LibreOJ-10149-凸多边形的划分</a></p><p>可以将一个多边形的划分拆为三部分：左，中（三角形），右。最小价值即为这三者的价值和，于是可以发现转移方程和能量项链类似：
+$$
+f_{i, j} = \min(f_{i, j}, f_{i, k} + f{k, j} + w_i w_k w_j)
+$$
+注意，本题数据较大，需要做高精度。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">64
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">65
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">66
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">67
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">68
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">69
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">70
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">71
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">72
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">73
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">74
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">75
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">76
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">77
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">78
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;cstring&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic></span>
+<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>55</span>, M <span style=color:#000;font-weight:700>=</span> <span style=color:#099>35</span>, PosInf <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1e9</span>;
+
+<span style=color:#458;font-weight:700>int</span> n, w[N];
+<span style=color:#458;font-weight:700>long</span> <span style=color:#458;font-weight:700>long</span> f[N][N][M];
+
+<span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>Add</span>(<span style=color:#458;font-weight:700>long</span> <span style=color:#458;font-weight:700>long</span> a[], <span style=color:#458;font-weight:700>long</span> <span style=color:#458;font-weight:700>long</span> b[])
+{
+    <span style=color:#000;font-weight:700>static</span> <span style=color:#458;font-weight:700>long</span> <span style=color:#458;font-weight:700>long</span> c[M];
+    memset(c, <span style=color:#099>0</span>, <span style=color:#000;font-weight:700>sizeof</span>(c));
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>, t <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; i <span style=color:#000;font-weight:700>&lt;</span> M; i<span style=color:#000;font-weight:700>++</span>)
+    {
+        t <span style=color:#000;font-weight:700>+=</span> a[i] <span style=color:#000;font-weight:700>+</span> b[i];
+        c[i] <span style=color:#000;font-weight:700>=</span> t <span style=color:#000;font-weight:700>%</span> <span style=color:#099>10</span>;
+        t <span style=color:#000;font-weight:700>/=</span> <span style=color:#099>10</span>;
+    }
+    memcpy(a, c, <span style=color:#000;font-weight:700>sizeof</span>(c));
+}
+
+<span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>Mul</span>(<span style=color:#458;font-weight:700>long</span> <span style=color:#458;font-weight:700>long</span> a[], <span style=color:#458;font-weight:700>long</span> <span style=color:#458;font-weight:700>long</span> b)
+{
+    <span style=color:#000;font-weight:700>static</span> <span style=color:#458;font-weight:700>long</span> <span style=color:#458;font-weight:700>long</span> c[M];
+    memset(c, <span style=color:#099>0</span>, <span style=color:#000;font-weight:700>sizeof</span>(c));
+    <span style=color:#458;font-weight:700>long</span> <span style=color:#458;font-weight:700>long</span> t <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>; i <span style=color:#000;font-weight:700>&lt;</span> M; i<span style=color:#000;font-weight:700>++</span>)
+    {
+        t <span style=color:#000;font-weight:700>+=</span> a[i] <span style=color:#000;font-weight:700>*</span> b;
+        c[i] <span style=color:#000;font-weight:700>=</span> t <span style=color:#000;font-weight:700>%</span> <span style=color:#099>10</span>;
+        t <span style=color:#000;font-weight:700>/=</span> <span style=color:#099>10</span>;
+    }
+    memcpy(a, c, <span style=color:#000;font-weight:700>sizeof</span>(c));
+}
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>Comp</span>(<span style=color:#458;font-weight:700>long</span> <span style=color:#458;font-weight:700>long</span> a[], <span style=color:#458;font-weight:700>long</span> <span style=color:#458;font-weight:700>long</span> b[])
+{
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> M <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&gt;=</span> <span style=color:#099>0</span>; i<span style=color:#000;font-weight:700>--</span>)
+        <span style=color:#000;font-weight:700>if</span> (a[i] <span style=color:#000;font-weight:700>&gt;</span> b[i])
+            <span style=color:#000;font-weight:700>return</span> <span style=color:#099>1</span>;
+        <span style=color:#000;font-weight:700>else</span> <span style=color:#000;font-weight:700>if</span> (a[i] <span style=color:#000;font-weight:700>&lt;</span> b[i])
+            <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>-</span><span style=color:#099>1</span>;
+    <span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+}
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+{
+    std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+        std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> w[i];
+
+    <span style=color:#458;font-weight:700>long</span> <span style=color:#458;font-weight:700>long</span> temp[M];
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> len <span style=color:#000;font-weight:700>=</span> <span style=color:#099>3</span>; len <span style=color:#000;font-weight:700>&lt;=</span> n <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>; len<span style=color:#000;font-weight:700>++</span>)
+        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> l <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; l <span style=color:#000;font-weight:700>+</span> len <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span> <span style=color:#000;font-weight:700>&lt;=</span> n; l<span style=color:#000;font-weight:700>++</span>)
+        {
+            <span style=color:#458;font-weight:700>int</span> r <span style=color:#000;font-weight:700>=</span> l <span style=color:#000;font-weight:700>+</span> len <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>;
+            f[l][r][M <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>] <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>;
+            <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> k <span style=color:#000;font-weight:700>=</span> l <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>; k <span style=color:#000;font-weight:700>&lt;</span> r; k<span style=color:#000;font-weight:700>++</span>)
+            {
+                memset(temp, <span style=color:#099>0</span>, <span style=color:#000;font-weight:700>sizeof</span>(temp));
+                temp[<span style=color:#099>0</span>] <span style=color:#000;font-weight:700>=</span> w[l];
+                Mul(temp, w[k]);
+                Mul(temp, w[r]);
+                Add(temp, f[l][k]);
+                Add(temp, f[k][r]);
+                <span style=color:#000;font-weight:700>if</span> (Comp(f[l][r], temp) <span style=color:#000;font-weight:700>&gt;</span> <span style=color:#099>0</span>)
+                    memcpy(f[l][r], temp, <span style=color:#000;font-weight:700>sizeof</span>(temp));
+            }
+        }
+
+    <span style=color:#458;font-weight:700>int</span> k <span style=color:#000;font-weight:700>=</span> M <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>;
+    <span style=color:#000;font-weight:700>while</span> (k <span style=color:#000;font-weight:700>&gt;</span> <span style=color:#099>0</span> <span style=color:#000;font-weight:700>&amp;&amp;</span> f[<span style=color:#099>1</span>][n][k] <span style=color:#000;font-weight:700>==</span> <span style=color:#099>0</span>)
+        k<span style=color:#000;font-weight:700>--</span>;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> k; i <span style=color:#000;font-weight:700>&gt;=</span> <span style=color:#099>0</span>; i<span style=color:#000;font-weight:700>--</span>)
+        std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> f[<span style=color:#099>1</span>][n][i];
+    std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
+    <span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+}
+</code></pre></td></tr></table></div></div><p><a href=https://www.acwing.com/problem/content/481/>AcWing-479-加分二叉树</a></p><p>这个题乍一看似乎和动态规划没有关系，但我们仔细分析“中序”，可以发现，正如区间中用点分割，中序遍历中，左右子树和根正好可以通过区间型动态规划的经典处理方式划分。因此用$f_{i, j}$表示中序遍历为输入数组的$i$到$j$位的二叉树中加分的最大值，但由于要输出具体方案，还要用$g_{i, j}$表示中序遍历为输入数组的$i$到$j$位的二叉树的根的序号。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic></span>
+<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>35</span>;
+
+<span style=color:#458;font-weight:700>int</span> n, w[N];
+<span style=color:#458;font-weight:700>int</span> f[N][N], g[N][N];
+
+<span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>Print</span>(<span style=color:#458;font-weight:700>int</span> l, <span style=color:#458;font-weight:700>int</span> r)
+{
+    <span style=color:#000;font-weight:700>if</span> (l <span style=color:#000;font-weight:700>&gt;</span> r)
+        <span style=color:#000;font-weight:700>return</span>;
+
+    <span style=color:#458;font-weight:700>int</span> root <span style=color:#000;font-weight:700>=</span> g[l][r];
+    std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> root <span style=color:#000;font-weight:700>&lt;&lt;</span> <span style=color:#d14>&#34; &#34;</span>;
+    Print(l, root <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>);
+    Print(root <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>, r);
+}
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+{
+    std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+        std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> w[i];
+
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> len <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; len <span style=color:#000;font-weight:700>&lt;=</span> n; len<span style=color:#000;font-weight:700>++</span>)
+        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> l <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; l <span style=color:#000;font-weight:700>+</span> len <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span> <span style=color:#000;font-weight:700>&lt;=</span> n; l<span style=color:#000;font-weight:700>++</span>)
+        {
+            <span style=color:#458;font-weight:700>int</span> r <span style=color:#000;font-weight:700>=</span> l <span style=color:#000;font-weight:700>+</span> len <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>;
+            <span style=color:#000;font-weight:700>if</span> (len <span style=color:#000;font-weight:700>==</span> <span style=color:#099>1</span>)
+            {
+                f[l][r] <span style=color:#000;font-weight:700>=</span> w[l];
+                g[l][r] <span style=color:#000;font-weight:700>=</span> l;
+            }
+            <span style=color:#000;font-weight:700>else</span>
+            {
+                <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> k <span style=color:#000;font-weight:700>=</span> l; k <span style=color:#000;font-weight:700>&lt;=</span> r; k<span style=color:#000;font-weight:700>++</span>)
+                {
+                    <span style=color:#458;font-weight:700>int</span> subl <span style=color:#000;font-weight:700>=</span> (k <span style=color:#000;font-weight:700>==</span> l) <span style=color:#000;font-weight:700>?</span> <span style=color:#099>1</span> <span style=color:#000;font-weight:700>:</span> f[l][k <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>];
+                    <span style=color:#458;font-weight:700>int</span> subr <span style=color:#000;font-weight:700>=</span> (k <span style=color:#000;font-weight:700>==</span> r) <span style=color:#000;font-weight:700>?</span> <span style=color:#099>1</span> <span style=color:#000;font-weight:700>:</span> f[k <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>][r];
+                    <span style=color:#458;font-weight:700>int</span> score <span style=color:#000;font-weight:700>=</span> subl <span style=color:#000;font-weight:700>*</span> subr <span style=color:#000;font-weight:700>+</span> w[k];
+                    <span style=color:#000;font-weight:700>if</span> (f[l][r] <span style=color:#000;font-weight:700>&lt;</span> score)
+                    {
+                        f[l][r] <span style=color:#000;font-weight:700>=</span> score;
+                        g[l][r] <span style=color:#000;font-weight:700>=</span> k;
+                    }
+                }
+            }
+        }
+
+    std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> f[<span style=color:#099>1</span>][n] <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
+    Print(<span style=color:#099>1</span>, n);
+    <span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+}
+</code></pre></td></tr></table></div></div><p><a href=https://www.acwing.com/problem/content/323/>AcWing-321-棋盘分割</a></p><p>本题的划分分为横向和纵向，同时区间也由一维扩展到了二维，因此实现时可以用记忆化搜索的方式减少代码量。用$f_{x1, y1, x2, y2, k}$表示$(x1, y1)$到$(x2, y2)$这个二维区间分割$k$次的最小均方差，那么这个区间可以横向或纵向划分，且可以任意选取划分后的两个子区间，按照这个逻辑，可以写出下面的代码：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iomanip&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;cmath&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;cstring&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic></span>
+<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> m <span style=color:#000;font-weight:700>=</span> <span style=color:#099>8</span>, M <span style=color:#000;font-weight:700>=</span> <span style=color:#099>9</span>, N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>20</span>, PosInf <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1e9</span>;
+
+<span style=color:#458;font-weight:700>int</span> n, s[M][M];
+<span style=color:#458;font-weight:700>double</span> f[M][M][M][M][N];
+<span style=color:#458;font-weight:700>double</span> average;
+
+<span style=color:#458;font-weight:700>double</span> <span style=color:#900;font-weight:700>Calc</span>(<span style=color:#458;font-weight:700>int</span> x1, <span style=color:#458;font-weight:700>int</span> y1, <span style=color:#458;font-weight:700>int</span> x2, <span style=color:#458;font-weight:700>int</span> y2)
+{
+    <span style=color:#458;font-weight:700>double</span> sum <span style=color:#000;font-weight:700>=</span> s[x2][y2] <span style=color:#000;font-weight:700>-</span> s[x2][y1 <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>] <span style=color:#000;font-weight:700>-</span> s[x1 <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][y2] <span style=color:#000;font-weight:700>+</span> s[x1 <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][y1 <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>];
+    <span style=color:#000;font-weight:700>return</span> (sum <span style=color:#000;font-weight:700>-</span> average) <span style=color:#000;font-weight:700>*</span> (sum <span style=color:#000;font-weight:700>-</span> average) <span style=color:#000;font-weight:700>/</span> n;
+}
+
+<span style=color:#458;font-weight:700>double</span> <span style=color:#900;font-weight:700>Search</span>(<span style=color:#458;font-weight:700>int</span> x1, <span style=color:#458;font-weight:700>int</span> y1, <span style=color:#458;font-weight:700>int</span> x2, <span style=color:#458;font-weight:700>int</span> y2, <span style=color:#458;font-weight:700>int</span> k)
+{
+    <span style=color:#458;font-weight:700>double</span> <span style=color:#000;font-weight:700>&amp;</span>v <span style=color:#000;font-weight:700>=</span> f[x1][y1][x2][y2][k];
+    <span style=color:#000;font-weight:700>if</span> (v <span style=color:#000;font-weight:700>&gt;=</span> <span style=color:#099>0</span>)
+        <span style=color:#000;font-weight:700>return</span> v;
+    <span style=color:#000;font-weight:700>if</span> (k <span style=color:#000;font-weight:700>==</span> <span style=color:#099>1</span>)
+        <span style=color:#000;font-weight:700>return</span> v <span style=color:#000;font-weight:700>=</span> Calc(x1, y1, x2, y2);
+
+    v <span style=color:#000;font-weight:700>=</span> PosInf;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> x1; i <span style=color:#000;font-weight:700>&lt;</span> x2; i<span style=color:#000;font-weight:700>++</span>)
+    {
+        v <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>min(v, Search(x1, y1, i, y2, k <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>) <span style=color:#000;font-weight:700>+</span> Calc(i <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>, y1, x2, y2));
+        v <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>min(v, Search(i <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>, y1, x2, y2, k <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>) <span style=color:#000;font-weight:700>+</span> Calc(x1, y1, i, y2));
+    }
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> y1; i <span style=color:#000;font-weight:700>&lt;</span> y2; i<span style=color:#000;font-weight:700>++</span>)
+    {
+        v <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>min(v, Search(x1, y1, x2, i, k <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>) <span style=color:#000;font-weight:700>+</span> Calc(x1, i <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>, x2, y2));
+        v <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>min(v, Search(x1, i <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>, x2, y2, k <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>) <span style=color:#000;font-weight:700>+</span> Calc(x1, y1, x2, i));
+    }
+
+    <span style=color:#000;font-weight:700>return</span> v;
+}
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+{
+    std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> m; i<span style=color:#000;font-weight:700>++</span>)
+        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; j <span style=color:#000;font-weight:700>&lt;=</span> m; j<span style=color:#000;font-weight:700>++</span>)
+        {
+            std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> s[i][j];
+            s[i][j] <span style=color:#000;font-weight:700>+=</span> s[i <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][j] <span style=color:#000;font-weight:700>+</span> s[i][j <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>] <span style=color:#000;font-weight:700>-</span> s[i <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][j <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>];
+        }
+
+    memset(f, <span style=color:#000;font-weight:700>-</span><span style=color:#099>1</span>, <span style=color:#000;font-weight:700>sizeof</span>(f));
+    average <span style=color:#000;font-weight:700>=</span> (<span style=color:#458;font-weight:700>double</span>)s[m][m] <span style=color:#000;font-weight:700>/</span> n;
+
+    std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>fixed <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>setprecision(<span style=color:#099>3</span>) <span style=color:#000;font-weight:700>&lt;&lt;</span> sqrt(Search(<span style=color:#099>1</span>, <span style=color:#099>1</span>, <span style=color:#099>8</span>, <span style=color:#099>8</span>, n)) <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
+    <span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+}
+</code></pre></td></tr></table></div></div><p><a href=https://www.luogu.com.cn/problem/P1436>洛谷-P1436-棋盘分割</a></p><p>这个跟上面一题其实是一样的，经过数学推导，上题求均方差，也就是求平方和，但均方差可以直接求。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;cstring&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
+</span><span style=color:#999;font-weight:700;font-style:italic></span>
+<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> m <span style=color:#000;font-weight:700>=</span> <span style=color:#099>8</span>, M <span style=color:#000;font-weight:700>=</span> <span style=color:#099>9</span>, N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>20</span>, PosInf <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1e9</span>;
+
+<span style=color:#458;font-weight:700>int</span> n, s[M][M];
+<span style=color:#458;font-weight:700>double</span> f[M][M][M][M][N];
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>Calc</span>(<span style=color:#458;font-weight:700>int</span> x1, <span style=color:#458;font-weight:700>int</span> y1, <span style=color:#458;font-weight:700>int</span> x2, <span style=color:#458;font-weight:700>int</span> y2)
+{
+    <span style=color:#458;font-weight:700>double</span> sum <span style=color:#000;font-weight:700>=</span> s[x2][y2] <span style=color:#000;font-weight:700>-</span> s[x2][y1 <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>] <span style=color:#000;font-weight:700>-</span> s[x1 <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][y2] <span style=color:#000;font-weight:700>+</span> s[x1 <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][y1 <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>];
+    <span style=color:#000;font-weight:700>return</span> sum <span style=color:#000;font-weight:700>*</span> sum;
+}
+
+<span style=color:#458;font-weight:700>double</span> <span style=color:#900;font-weight:700>Search</span>(<span style=color:#458;font-weight:700>int</span> x1, <span style=color:#458;font-weight:700>int</span> y1, <span style=color:#458;font-weight:700>int</span> x2, <span style=color:#458;font-weight:700>int</span> y2, <span style=color:#458;font-weight:700>int</span> k)
+{
+    <span style=color:#458;font-weight:700>double</span> <span style=color:#000;font-weight:700>&amp;</span>v <span style=color:#000;font-weight:700>=</span> f[x1][y1][x2][y2][k];
+    <span style=color:#000;font-weight:700>if</span> (v <span style=color:#000;font-weight:700>&gt;=</span> <span style=color:#099>0</span>)
+        <span style=color:#000;font-weight:700>return</span> v;
+    <span style=color:#000;font-weight:700>if</span> (k <span style=color:#000;font-weight:700>==</span> <span style=color:#099>1</span>)
+        <span style=color:#000;font-weight:700>return</span> v <span style=color:#000;font-weight:700>=</span> Calc(x1, y1, x2, y2);
+
+    v <span style=color:#000;font-weight:700>=</span> PosInf;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> x1; i <span style=color:#000;font-weight:700>&lt;</span> x2; i<span style=color:#000;font-weight:700>++</span>)
+    {
+        v <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>min(v, Search(x1, y1, i, y2, k <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>) <span style=color:#000;font-weight:700>+</span> Calc(i <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>, y1, x2, y2));
+        v <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>min(v, Search(i <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>, y1, x2, y2, k <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>) <span style=color:#000;font-weight:700>+</span> Calc(x1, y1, i, y2));
+    }
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> y1; i <span style=color:#000;font-weight:700>&lt;</span> y2; i<span style=color:#000;font-weight:700>++</span>)
+    {
+        v <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>min(v, Search(x1, y1, x2, i, k <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>) <span style=color:#000;font-weight:700>+</span> Calc(x1, i <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>, x2, y2));
+        v <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>min(v, Search(x1, i <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>, x2, y2, k <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>) <span style=color:#000;font-weight:700>+</span> Calc(x1, y1, x2, i));
+    }
+
+    <span style=color:#000;font-weight:700>return</span> v;
+}
+
+<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+{
+    std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n;
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> m; i<span style=color:#000;font-weight:700>++</span>)
+        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; j <span style=color:#000;font-weight:700>&lt;=</span> m; j<span style=color:#000;font-weight:700>++</span>)
+        {
+            std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> s[i][j];
+            s[i][j] <span style=color:#000;font-weight:700>+=</span> s[i <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][j] <span style=color:#000;font-weight:700>+</span> s[i][j <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>] <span style=color:#000;font-weight:700>-</span> s[i <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][j <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>];
+        }
+
+    memset(f, <span style=color:#000;font-weight:700>-</span><span style=color:#099>1</span>, <span style=color:#000;font-weight:700>sizeof</span>(f));
+
+    std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> Search(<span style=color:#099>1</span>, <span style=color:#099>1</span>, <span style=color:#099>8</span>, <span style=color:#099>8</span>, n) <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
+    <span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+}
+</code></pre></td></tr></table></div></div><h2 id=区间型动态规划的两种实现方式>区间型动态规划的两种实现方式</h2><h3 id=迭代式推荐>迭代式（推荐）</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> len <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; len <span style=color:#000;font-weight:700>&lt;=</span> n; len<span style=color:#000;font-weight:700>++</span>)
+    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> l <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; l <span style=color:#000;font-weight:700>+</span> len <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span> <span style=color:#000;font-weight:700>&lt;=</span> n; l<span style=color:#000;font-weight:700>++</span>)
+    {
+        r <span style=color:#000;font-weight:700>=</span> l <span style=color:#000;font-weight:700>+</span> len <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>;
+        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> k <span style=color:#000;font-weight:700>=</span> l; k <span style=color:#000;font-weight:700>&lt;</span> r; k<span style=color:#000;font-weight:700>++</span>)
+            <span style=color:#998;font-style:italic>// do something
+</span><span style=color:#998;font-style:italic></span>    }
+</code></pre></td></tr></table></div></div><h3 id=记忆化搜索式适合状态定义较为复杂的情况>记忆化搜索式（适合状态定义较为复杂的情况）</h3><p>如果状态定义中数组维数太多，需要些很多重循环，这时可以用记忆化搜索的形式来写。</p></div><div class=post-archive><ul class=post-copyright><li><strong>原文作者：</strong><a rel=author href=https://www.pigaunt.top>PigAunt</a></li><li style=word-break:break-all><strong>原文链接：</strong><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%8C%BA%E9%97%B4%E5%9E%8B%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/>https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%8C%BA%E9%97%B4%E5%9E%8B%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/</a></li><li><strong>版权声明：</strong>本作品采用<a rel=license href>知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li></ul></div><br><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=/post/misc/hello-world/>Hello World</a></li><li><a href=/archives/>归档</a></li><li><a href=/search/>搜索</a></li><li><a href=/about/>关于</a></li><li><a href=/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/></a></li></ul></div><div class="post-meta meta-tags">没有标签</div></article></div><footer id=footer><div>&copy; 2021 <a href=https://www.pigaunt.top>PigAunt的博客 By PigAunt</a></div><br><div><div class=github-badge><a href=https://gohugo.io/ target=_black rel=nofollow><span class=badge-subject>Powered by</span><span class="badge-value bg-blue">Hugo</span></a></div><div class=github-badge><a href=https://www.flysnow.org/ target=_black><span class=badge-subject>Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a></div><div class=github-badge><a href=https://github.com/flysnow-org/maupassant-hugo target=_black><span class=badge-subject>Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a></div></div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[['$','$']],processEscapes:!0}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script><a id=rocket href=#top></a><script type=text/javascript src="/js/totop.js?v=0.0.0" async></script><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script><script src=/js/douban.js></script></div><div id=secondary><section class=widget><form id=search action=https://www.pigaunt.top/search/ method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
+<input type=hidden name=sitesearch value=https://www.pigaunt.top>
+<button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=https://www.pigaunt.top/post/misc/hello-world/ title="Hello World">Hello World</a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LIS%E5%92%8CLCS/ title></a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%8C%BA%E9%97%B4%E5%9E%8B%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/ title></a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E6%95%B0%E5%AD%97%E4%B8%89%E8%A7%92%E5%BD%A2/ title></a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%8A%B6%E6%80%81%E6%9C%BA/ title></a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/ title></a></li></ul></section><section class=widget><h3 class=widget-title><a href=/categories/>分类</a></h3><ul class=widget-list><li><a href=https://www.pigaunt.top/categories/misc/>misc (1)</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/tags/>标签</a></h3><div class=tagcloud><a href=https://www.pigaunt.top/tags/misc/>misc</a></div></section><section class=widget><h3 class=widget-title>友情链接</h3><ul class=widget-list><li><a target=_blank href=https://rusun.blog.luogu.org/ title=RuSun的博客>RuSun的博客</a></li></ul></section><section class=widget><h3 class=widget-title>其它</h3><ul class=widget-list><li><a href=https://www.pigaunt.top/index.xml>文章 RSS</a></li></ul></section></div></div></div></div></body></html>
