@@ -4,7 +4,7 @@
 <span class=meta-category><a href=/categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92>动态规划</a></span></div><div class=post-meta><span id=busuanzi_container_page_pv>|<span id=busuanzi_value_page_pv></span><span>
 阅读</span></span></div><div class=post-content><h1 id=lis和lcs>LIS和LCS</h1><h2 id=最长上升子序列lis问题>最长上升子序列（LIS）问题</h2><p>给出一个由数字组成的序列，要求从中挑选尽量多的数，组成一个单调上升的子序列。</p><p>要解决这个问题，我们可以这样想：</p><p>如果现在有了一个最长上升子序列，我们要在后面加一个数。如果这个数比最长上升子序列的最后一个数大，我们可以将它加入其中；如果更小，那只能去找找稍微短一些的上升子序列，看看能不能加入；实在没有，那就保持现状。</p><p>这个思路很清晰，但由于添加的数是否在序列中未知，处理起来比较麻烦。此时我们<strong>要求以加入的数结尾</strong>，再递推就简单许多了，可以写出如下的转移方程：</p><p>$$
 f_i = \max(1, (a_j &lt; a_i)(f_j + 1))
-$$</p><p>初始值为$0$，答案$\max(f_i)$</p><p>因此我们可以把代码写出来：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+$$</p><p>初始值为$0$，答案$\max(f_i)$</p><p>因此我们可以把代码写出来：</p><div class=highlight><div style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
@@ -36,39 +36,39 @@ $$</p><p>初始值为$0$，答案$\max(f_i)$</p><p>因此我们可以把代码�
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
-</span><span style=color:#999;font-weight:700;font-style:italic></span>
-<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1005</span>;
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#ff79c6>#include</span> <span style=color:#ff79c6>&lt;iostream&gt;</span><span style=color:#ff79c6>
+</span><span style=color:#ff79c6></span>
+<span style=color:#ff79c6>const</span> <span style=color:#8be9fd>int</span> N <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1005</span>;
 
-<span style=color:#458;font-weight:700>int</span> n;
-<span style=color:#458;font-weight:700>int</span> a[N], f[N];
+<span style=color:#8be9fd>int</span> n;
+<span style=color:#8be9fd>int</span> a[N], f[N];
 
-<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+<span style=color:#8be9fd>int</span> <span style=color:#50fa7b>main</span>()
 {
-	std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n;
-	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+	std<span style=color:#ff79c6>::</span>cin <span style=color:#ff79c6>&gt;&gt;</span> n;
+	<span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; i <span style=color:#ff79c6>&lt;=</span> n; i<span style=color:#ff79c6>++</span>)
 	{
-		std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> a[i];
+		std<span style=color:#ff79c6>::</span>cin <span style=color:#ff79c6>&gt;&gt;</span> a[i];
 	}
 	
-	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+	<span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; i <span style=color:#ff79c6>&lt;=</span> n; i<span style=color:#ff79c6>++</span>)
 	{
-		f[i] <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>;
-		<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; j <span style=color:#000;font-weight:700>&lt;</span> i; j<span style=color:#000;font-weight:700>++</span>)
+		f[i] <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>;
+		<span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> j <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; j <span style=color:#ff79c6>&lt;</span> i; j<span style=color:#ff79c6>++</span>)
 		{
-			<span style=color:#000;font-weight:700>if</span> (a[j] <span style=color:#000;font-weight:700>&lt;</span> a[i])
-				f[i] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(f[i], f[j] <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>);
+			<span style=color:#ff79c6>if</span> (a[j] <span style=color:#ff79c6>&lt;</span> a[i])
+				f[i] <span style=color:#ff79c6>=</span> std<span style=color:#ff79c6>::</span>max(f[i], f[j] <span style=color:#ff79c6>+</span> <span style=color:#bd93f9>1</span>);
 
 		}
 	}
 	
-	<span style=color:#458;font-weight:700>int</span> ans <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>;
-	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
-		ans <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(ans, f[i]);
-	std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> ans <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
-	<span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+	<span style=color:#8be9fd>int</span> ans <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span>;
+	<span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; i <span style=color:#ff79c6>&lt;=</span> n; i<span style=color:#ff79c6>++</span>)
+		ans <span style=color:#ff79c6>=</span> std<span style=color:#ff79c6>::</span>max(ans, f[i]);
+	std<span style=color:#ff79c6>::</span>cout <span style=color:#ff79c6>&lt;&lt;</span> ans <span style=color:#ff79c6>&lt;&lt;</span> std<span style=color:#ff79c6>::</span>endl;
+	<span style=color:#ff79c6>return</span> <span style=color:#bd93f9>0</span>;
 }
-</code></pre></td></tr></table></div></div><h3 id=例题>例题</h3><p><a href=https://www.acwing.com/problem/content/484/>AcWing-482-合唱队形</a></p><p>本题求最少同学出列，其实就是求最长上升后下降子序列，然后用总数减就是了。</p><p>求最长上升后下降子序列时，只需要分别求上升和下降，但一定要注意，要保证两次递推时，每次控制作为结尾的数要是“峰顶”，我之前图方便，想在一个循环里搞定，就出错了。</p><p>AC代码：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</code></pre></td></tr></table></div></div><h3 id=例题>例题</h3><p><a href=https://www.acwing.com/problem/content/484/>AcWing-482-合唱队形</a></p><p>本题求最少同学出列，其实就是求最长上升后下降子序列，然后用总数减就是了。</p><p>求最长上升后下降子序列时，只需要分别求上升和下降，但一定要注意，要保证两次递推时，每次控制作为结尾的数要是“峰顶”，我之前图方便，想在一个循环里搞定，就出错了。</p><p>AC代码：</p><div class=highlight><div style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
@@ -104,43 +104,43 @@ $$</p><p>初始值为$0$，答案$\max(f_i)$</p><p>因此我们可以把代码�
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
-</span><span style=color:#999;font-weight:700;font-style:italic></span>
-<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1005</span>;
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#ff79c6>#include</span> <span style=color:#ff79c6>&lt;iostream&gt;</span><span style=color:#ff79c6>
+</span><span style=color:#ff79c6></span>
+<span style=color:#ff79c6>const</span> <span style=color:#8be9fd>int</span> N <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1005</span>;
 
-<span style=color:#458;font-weight:700>int</span> n, h[N];
-<span style=color:#458;font-weight:700>int</span> up[N], down[N];
+<span style=color:#8be9fd>int</span> n, h[N];
+<span style=color:#8be9fd>int</span> up[N], down[N];
 
-<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+<span style=color:#8be9fd>int</span> <span style=color:#50fa7b>main</span>()
 {
-    <span style=color:#458;font-weight:700>int</span> n;
-    std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n;
-    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
-        std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> h[i];
+    <span style=color:#8be9fd>int</span> n;
+    std<span style=color:#ff79c6>::</span>cin <span style=color:#ff79c6>&gt;&gt;</span> n;
+    <span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; i <span style=color:#ff79c6>&lt;=</span> n; i<span style=color:#ff79c6>++</span>)
+        std<span style=color:#ff79c6>::</span>cin <span style=color:#ff79c6>&gt;&gt;</span> h[i];
     
-    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+    <span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; i <span style=color:#ff79c6>&lt;=</span> n; i<span style=color:#ff79c6>++</span>)
     {
-        up[i] <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>;
-        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; j <span style=color:#000;font-weight:700>&lt;</span> i; j<span style=color:#000;font-weight:700>++</span>)
-            <span style=color:#000;font-weight:700>if</span> (h[i] <span style=color:#000;font-weight:700>&gt;</span> h[j])
-                up[i] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(up[i], up[j] <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>);
+        up[i] <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>;
+        <span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> j <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; j <span style=color:#ff79c6>&lt;</span> i; j<span style=color:#ff79c6>++</span>)
+            <span style=color:#ff79c6>if</span> (h[i] <span style=color:#ff79c6>&gt;</span> h[j])
+                up[i] <span style=color:#ff79c6>=</span> std<span style=color:#ff79c6>::</span>max(up[i], up[j] <span style=color:#ff79c6>+</span> <span style=color:#bd93f9>1</span>);
     }
 
-    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> n; i <span style=color:#000;font-weight:700>&gt;</span> <span style=color:#099>0</span>; i<span style=color:#000;font-weight:700>--</span>)
+    <span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> n; i <span style=color:#ff79c6>&gt;</span> <span style=color:#bd93f9>0</span>; i<span style=color:#ff79c6>--</span>)
     {
-        down[i] <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>;
-        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> n; j <span style=color:#000;font-weight:700>&gt;</span> i; j<span style=color:#000;font-weight:700>--</span>)
-            <span style=color:#000;font-weight:700>if</span> (h[i] <span style=color:#000;font-weight:700>&gt;</span> h[j])
-                down[i] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(down[i], down[j] <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>);
+        down[i] <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>;
+        <span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> j <span style=color:#ff79c6>=</span> n; j <span style=color:#ff79c6>&gt;</span> i; j<span style=color:#ff79c6>--</span>)
+            <span style=color:#ff79c6>if</span> (h[i] <span style=color:#ff79c6>&gt;</span> h[j])
+                down[i] <span style=color:#ff79c6>=</span> std<span style=color:#ff79c6>::</span>max(down[i], down[j] <span style=color:#ff79c6>+</span> <span style=color:#bd93f9>1</span>);
     }
 
-    <span style=color:#458;font-weight:700>int</span> res <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>;
-    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
-        res <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(res, up[i] <span style=color:#000;font-weight:700>+</span> down[i] <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>);
-    std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> n <span style=color:#000;font-weight:700>-</span> res <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
-    <span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+    <span style=color:#8be9fd>int</span> res <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span>;
+    <span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; i <span style=color:#ff79c6>&lt;=</span> n; i<span style=color:#ff79c6>++</span>)
+        res <span style=color:#ff79c6>=</span> std<span style=color:#ff79c6>::</span>max(res, up[i] <span style=color:#ff79c6>+</span> down[i] <span style=color:#ff79c6>-</span> <span style=color:#bd93f9>1</span>);
+    std<span style=color:#ff79c6>::</span>cout <span style=color:#ff79c6>&lt;&lt;</span> n <span style=color:#ff79c6>-</span> res <span style=color:#ff79c6>&lt;&lt;</span> std<span style=color:#ff79c6>::</span>endl;
+    <span style=color:#ff79c6>return</span> <span style=color:#bd93f9>0</span>;
 }
-</code></pre></td></tr></table></div></div><h2 id=最长公共子序列lcs问题>最长公共子序列（LCS）问题</h2><p>给出两个由数字组成的序列，要求从中挑选尽量多的两个序列共有的数，组成子序列。</p><p>要考虑这个问题，我们可以顺着刚才的思路，用已知信息推出未知。</p><p>代码如下：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</code></pre></td></tr></table></div></div><h2 id=最长公共子序列lcs问题>最长公共子序列（LCS）问题</h2><p>给出两个由数字组成的序列，要求从中挑选尽量多的两个序列共有的数，组成子序列。</p><p>要考虑这个问题，我们可以顺着刚才的思路，用已知信息推出未知。</p><p>代码如下：</p><div class=highlight><div style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
@@ -164,31 +164,31 @@ $$</p><p>初始值为$0$，答案$\max(f_i)$</p><p>因此我们可以把代码�
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
-</span><span style=color:#999;font-weight:700;font-style:italic></span>
-<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1005</span>;
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#ff79c6>#include</span> <span style=color:#ff79c6>&lt;iostream&gt;</span><span style=color:#ff79c6>
+</span><span style=color:#ff79c6></span>
+<span style=color:#ff79c6>const</span> <span style=color:#8be9fd>int</span> N <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1005</span>;
 
-<span style=color:#458;font-weight:700>int</span> n, m, d[N][N];
-<span style=color:#458;font-weight:700>char</span> a[N], b[N];
+<span style=color:#8be9fd>int</span> n, m, d[N][N];
+<span style=color:#8be9fd>char</span> a[N], b[N];
 
-<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+<span style=color:#8be9fd>int</span> <span style=color:#50fa7b>main</span>()
 {
-	std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n <span style=color:#000;font-weight:700>&gt;&gt;</span> m <span style=color:#000;font-weight:700>&gt;&gt;</span> a <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span> <span style=color:#000;font-weight:700>&gt;&gt;</span> b <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>;
-	<span style=color:#998;font-style:italic>// getline(std::cin, a);
-</span><span style=color:#998;font-style:italic></span>	<span style=color:#998;font-style:italic>// getline(std::cin, b);
-</span><span style=color:#998;font-style:italic></span>	
-	<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
-		<span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; j <span style=color:#000;font-weight:700>&lt;=</span> m; j<span style=color:#000;font-weight:700>++</span>)
+	std<span style=color:#ff79c6>::</span>cin <span style=color:#ff79c6>&gt;&gt;</span> n <span style=color:#ff79c6>&gt;&gt;</span> m <span style=color:#ff79c6>&gt;&gt;</span> a <span style=color:#ff79c6>+</span> <span style=color:#bd93f9>1</span> <span style=color:#ff79c6>&gt;&gt;</span> b <span style=color:#ff79c6>+</span> <span style=color:#bd93f9>1</span>;
+	<span style=color:#6272a4>// getline(std::cin, a);
+</span><span style=color:#6272a4></span>	<span style=color:#6272a4>// getline(std::cin, b);
+</span><span style=color:#6272a4></span>	
+	<span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; i <span style=color:#ff79c6>&lt;=</span> n; i<span style=color:#ff79c6>++</span>)
+		<span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> j <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; j <span style=color:#ff79c6>&lt;=</span> m; j<span style=color:#ff79c6>++</span>)
 		{
-			d[i][j] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(d[i <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][j], d[i][j <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>]);
-			<span style=color:#000;font-weight:700>if</span> (a[i] <span style=color:#000;font-weight:700>==</span> b[j])
-				d[i][j] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(d[i][j], d[i <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][j <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>] <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>);
+			d[i][j] <span style=color:#ff79c6>=</span> std<span style=color:#ff79c6>::</span>max(d[i <span style=color:#ff79c6>-</span> <span style=color:#bd93f9>1</span>][j], d[i][j <span style=color:#ff79c6>-</span> <span style=color:#bd93f9>1</span>]);
+			<span style=color:#ff79c6>if</span> (a[i] <span style=color:#ff79c6>==</span> b[j])
+				d[i][j] <span style=color:#ff79c6>=</span> std<span style=color:#ff79c6>::</span>max(d[i][j], d[i <span style=color:#ff79c6>-</span> <span style=color:#bd93f9>1</span>][j <span style=color:#ff79c6>-</span> <span style=color:#bd93f9>1</span>] <span style=color:#ff79c6>+</span> <span style=color:#bd93f9>1</span>);
 		}
 	
-	std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> d[n][m] <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
-	<span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+	std<span style=color:#ff79c6>::</span>cout <span style=color:#ff79c6>&lt;&lt;</span> d[n][m] <span style=color:#ff79c6>&lt;&lt;</span> std<span style=color:#ff79c6>::</span>endl;
+	<span style=color:#ff79c6>return</span> <span style=color:#bd93f9>0</span>;
 }
-</code></pre></td></tr></table></div></div><h2 id=两个问题的联系>两个问题的联系</h2><p>我们可以发现，两个问题中状态表示的关键都在“最后一个”，或者说“新加入的一个”，这样处理方便了对转移方向的判断。</p><h3 id=例题-1>例题</h3><p><a href=https://www.acwing.com/problem/content/274/>AcWing-274-最长公共上升子序列</a></p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</code></pre></td></tr></table></div></div><h2 id=两个问题的联系>两个问题的联系</h2><p>我们可以发现，两个问题中状态表示的关键都在“最后一个”，或者说“新加入的一个”，这样处理方便了对转移方向的判断。</p><h3 id=例题-1>例题</h3><p><a href=https://www.acwing.com/problem/content/274/>AcWing-274-最长公共上升子序列</a></p><div class=highlight><div style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
@@ -222,41 +222,41 @@ $$</p><p>初始值为$0$，答案$\max(f_i)$</p><p>因此我们可以把代码�
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#999;font-weight:700;font-style:italic>#include</span> <span style=color:#999;font-weight:700;font-style:italic>&lt;iostream&gt;</span><span style=color:#999;font-weight:700;font-style:italic>
-</span><span style=color:#999;font-weight:700;font-style:italic></span>
-<span style=color:#000;font-weight:700>const</span> <span style=color:#458;font-weight:700>int</span> N <span style=color:#000;font-weight:700>=</span> <span style=color:#099>3005</span>;
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=color:#ff79c6>#include</span> <span style=color:#ff79c6>&lt;iostream&gt;</span><span style=color:#ff79c6>
+</span><span style=color:#ff79c6></span>
+<span style=color:#ff79c6>const</span> <span style=color:#8be9fd>int</span> N <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>3005</span>;
 
-<span style=color:#458;font-weight:700>int</span> n, a[N], b[N];
-<span style=color:#458;font-weight:700>int</span> f[N][N];
+<span style=color:#8be9fd>int</span> n, a[N], b[N];
+<span style=color:#8be9fd>int</span> f[N][N];
 
-<span style=color:#458;font-weight:700>int</span> <span style=color:#900;font-weight:700>main</span>()
+<span style=color:#8be9fd>int</span> <span style=color:#50fa7b>main</span>()
 {
-    std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> n;
-    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
-        std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> a[i];
-    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
-        std<span style=color:#000;font-weight:700>::</span>cin <span style=color:#000;font-weight:700>&gt;&gt;</span> b[i];
+    std<span style=color:#ff79c6>::</span>cin <span style=color:#ff79c6>&gt;&gt;</span> n;
+    <span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; i <span style=color:#ff79c6>&lt;=</span> n; i<span style=color:#ff79c6>++</span>)
+        std<span style=color:#ff79c6>::</span>cin <span style=color:#ff79c6>&gt;&gt;</span> a[i];
+    <span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; i <span style=color:#ff79c6>&lt;=</span> n; i<span style=color:#ff79c6>++</span>)
+        std<span style=color:#ff79c6>::</span>cin <span style=color:#ff79c6>&gt;&gt;</span> b[i];
     
-    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
+    <span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; i <span style=color:#ff79c6>&lt;=</span> n; i<span style=color:#ff79c6>++</span>)
     {
-        <span style=color:#458;font-weight:700>int</span> maxv <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>;
-        <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> j <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; j <span style=color:#000;font-weight:700>&lt;=</span> n; j<span style=color:#000;font-weight:700>++</span>)
+        <span style=color:#8be9fd>int</span> maxv <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span>;
+        <span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> j <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; j <span style=color:#ff79c6>&lt;=</span> n; j<span style=color:#ff79c6>++</span>)
         {
-            f[i][j] <span style=color:#000;font-weight:700>=</span> f[i <span style=color:#000;font-weight:700>-</span> <span style=color:#099>1</span>][j];
-            <span style=color:#000;font-weight:700>if</span> (a[i] <span style=color:#000;font-weight:700>==</span> b[j])
-                f[i][j] <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(f[i][j], maxv <span style=color:#000;font-weight:700>+</span> <span style=color:#099>1</span>);
-            <span style=color:#000;font-weight:700>if</span> (a[i] <span style=color:#000;font-weight:700>&gt;</span> b[j])
-                maxv <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(maxv, f[i][j]);
+            f[i][j] <span style=color:#ff79c6>=</span> f[i <span style=color:#ff79c6>-</span> <span style=color:#bd93f9>1</span>][j];
+            <span style=color:#ff79c6>if</span> (a[i] <span style=color:#ff79c6>==</span> b[j])
+                f[i][j] <span style=color:#ff79c6>=</span> std<span style=color:#ff79c6>::</span>max(f[i][j], maxv <span style=color:#ff79c6>+</span> <span style=color:#bd93f9>1</span>);
+            <span style=color:#ff79c6>if</span> (a[i] <span style=color:#ff79c6>&gt;</span> b[j])
+                maxv <span style=color:#ff79c6>=</span> std<span style=color:#ff79c6>::</span>max(maxv, f[i][j]);
         }
     }
     
-    <span style=color:#458;font-weight:700>int</span> res <span style=color:#000;font-weight:700>=</span> <span style=color:#099>0</span>;
-    <span style=color:#000;font-weight:700>for</span> (<span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> <span style=color:#099>1</span>; i <span style=color:#000;font-weight:700>&lt;=</span> n; i<span style=color:#000;font-weight:700>++</span>)
-        res <span style=color:#000;font-weight:700>=</span> std<span style=color:#000;font-weight:700>::</span>max(res, f[n][i]);
-    std<span style=color:#000;font-weight:700>::</span>cout <span style=color:#000;font-weight:700>&lt;&lt;</span> res <span style=color:#000;font-weight:700>&lt;&lt;</span> std<span style=color:#000;font-weight:700>::</span>endl;
-    <span style=color:#000;font-weight:700>return</span> <span style=color:#099>0</span>;
+    <span style=color:#8be9fd>int</span> res <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span>;
+    <span style=color:#ff79c6>for</span> (<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span>; i <span style=color:#ff79c6>&lt;=</span> n; i<span style=color:#ff79c6>++</span>)
+        res <span style=color:#ff79c6>=</span> std<span style=color:#ff79c6>::</span>max(res, f[n][i]);
+    std<span style=color:#ff79c6>::</span>cout <span style=color:#ff79c6>&lt;&lt;</span> res <span style=color:#ff79c6>&lt;&lt;</span> std<span style=color:#ff79c6>::</span>endl;
+    <span style=color:#ff79c6>return</span> <span style=color:#bd93f9>0</span>;
 }
-</code></pre></td></tr></table></div></div></div><div class=post-archive><ul class=post-copyright><li><strong>原文作者：</strong><a rel=author href=https://www.pigaunt.top>PigAunt</a></li><li style=word-break:break-all><strong>原文链接：</strong><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LIS%E5%92%8CLCS/>https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LIS%E5%92%8CLCS/</a></li><li><strong>版权声明：</strong>本作品采用<a rel=license href>知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接）并按照相同协议共享，禁止商业转载。</li></ul></div><br><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/>背包问题</a></li><li><a href=/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%8C%BA%E9%97%B4%E5%9E%8B%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/>区间型动态规划</a></li><li><a href=/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E6%95%B0%E5%AD%97%E4%B8%89%E8%A7%92%E5%BD%A2/>数字三角形</a></li><li><a href=/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%8A%B6%E6%80%81%E6%9C%BA/>状态机</a></li><li><a href=/post/misc/hello-world/>Hello World</a></li></ul></div><div class="post-meta meta-tags"><ul class=clearfix><li><a href=/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92>动态规划</a></li></ul></div></article></div><footer id=footer><div>&copy; 2021 <a href=https://www.pigaunt.top>PigAunt的博客 By PigAunt</a></div><br><div><div class=github-badge><a href=https://gohugo.io/ target=_black rel=nofollow><span class=badge-subject>Powered by</span><span class="badge-value bg-blue">Hugo</span></a></div><div class=github-badge><a href=https://www.flysnow.org/ target=_black><span class=badge-subject>Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a></div><div class=github-badge><a href=https://github.com/flysnow-org/maupassant-hugo target=_black><span class=badge-subject>Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a></div></div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[['$','$']],processEscapes:!0}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script><a id=rocket href=#top></a><script type=text/javascript src="/js/totop.js?v=0.0.0" async></script><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script><script src=/js/douban.js></script></div><div id=secondary><section class=widget><form id=search action=https://www.pigaunt.top/search/ method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
+</code></pre></td></tr></table></div></div></div><div class=post-archive><ul class=post-copyright><li><strong>原文作者：</strong><a rel=author href=https://www.pigaunt.top>PigAunt</a></li><li style=word-break:break-all><strong>原文链接：</strong><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LIS%E5%92%8CLCS/>https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LIS%E5%92%8CLCS/</a></li><li><strong>版权声明：</strong>本作品采用<a rel=license href>知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接）并按照相同协议共享，禁止商业转载。</li></ul></div><br><div class=post-archive><h2>See Also</h2><ul class=listing><li><a href=/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%8A%B6%E6%80%81%E6%9C%BA/>状态机</a></li><li><a href=/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%8C%BA%E9%97%B4%E5%9E%8B%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/>区间型动态规划</a></li><li><a href=/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E6%95%B0%E5%AD%97%E4%B8%89%E8%A7%92%E5%BD%A2/>数字三角形</a></li><li><a href=/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/>背包问题</a></li><li><a href=/post/misc/hello-world/>Hello World</a></li></ul></div><div class="post-meta meta-tags"><ul class=clearfix><li><a href=/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92>动态规划</a></li></ul></div></article></div><footer id=footer><div>&copy; 2021 <a href=https://www.pigaunt.top>PigAunt的博客 By PigAunt</a></div><br><div><div class=github-badge><a href=https://gohugo.io/ target=_black rel=nofollow><span class=badge-subject>Powered by</span><span class="badge-value bg-blue">Hugo</span></a></div><div class=github-badge><a href=https://www.flysnow.org/ target=_black><span class=badge-subject>Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a></div><div class=github-badge><a href=https://github.com/flysnow-org/maupassant-hugo target=_black><span class=badge-subject>Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a></div></div></footer><script type=text/javascript>window.MathJax={tex2jax:{inlineMath:[['$','$']],processEscapes:!0}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script><a id=rocket href=#top></a><script type=text/javascript src="/js/totop.js?v=0.0.0" async></script><script type=text/javascript src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async></script><script src=/js/douban.js></script></div><div id=secondary><section class=widget><form id=search action=https://www.pigaunt.top/search/ method=get accept-charset=utf-8 target=_blank _lpchecked=1><input type=text name=q maxlength=20 placeholder=Search>
 <input type=hidden name=sitesearch value=https://www.pigaunt.top>
 <button type=submit class="submit icon-search"></button></form></section><section class=widget><h3 class=widget-title>最近文章</h3><ul class=widget-list><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E6%A0%91%E5%BD%A2%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/ title=树形动态规划>树形动态规划</a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E6%95%B0%E4%BD%8D%E5%9E%8B%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/ title=数位型动态规划>数位型动态规划</a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%8A%B6%E6%80%81%E5%8E%8B%E7%BC%A9%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/ title=状态压缩的动态规划>状态压缩的动态规划</a></li><li><a href=https://www.pigaunt.top/post/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/ title=单调队列>单调队列</a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/LIS%E5%92%8CLCS/ title=LIS和LCS>LIS和LCS</a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E5%8C%BA%E9%97%B4%E5%9E%8B%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/ title=区间型动态规划>区间型动态规划</a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E6%95%B0%E5%AD%97%E4%B8%89%E8%A7%92%E5%BD%A2/ title=数字三角形>数字三角形</a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E7%8A%B6%E6%80%81%E6%9C%BA/ title=状态机>状态机</a></li><li><a href=https://www.pigaunt.top/post/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/ title=背包问题>背包问题</a></li><li><a href=https://www.pigaunt.top/post/misc/hello-world/ title="Hello World">Hello World</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/categories/>分类</a></h3><ul class=widget-list><li><a href=https://www.pigaunt.top/categories/misc/>misc (1)</a></li><li><a href=https://www.pigaunt.top/categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/>动态规划 (8)</a></li><li><a href=https://www.pigaunt.top/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/>数据结构 (1)</a></li></ul></section><section class=widget><h3 class=widget-title><a href=/tags/>标签</a></h3><div class=tagcloud><a href=https://www.pigaunt.top/tags/misc/>misc</a>
 <a href=https://www.pigaunt.top/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/>动态规划</a>
