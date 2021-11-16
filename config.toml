@@ -38,14 +38,14 @@ summaryLength = 140
 
 ## 开启版权声明，协议名字和链接都可以换
 [params.cc]
-  name = "知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议"
-  ink = "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+  name = "知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议"
+  ink = "https://creativecommons.org/licenses/by-nc-sa/4.0/"
 
 ## 配置代码高亮
 [markup]
   [markup.highlight]
     lineNos = true
-    style = "github"
+    style = "dracula"
 
 ## 配置网站菜单
 [menu]
