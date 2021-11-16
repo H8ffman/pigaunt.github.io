@@ -4,9 +4,7 @@ title = "PigAunt的博客"
 theme = "maupassant"
 googleAnalytics = ""  # UA-XXXXXXXX-X
 
-## 保持分类的原始名字（false会做转小写处理）
 preserveTaxonomyNames = true
-## 是否禁止URL Path转小写
 disablePathToLower = true
 
 hasCJKLanguage = true
@@ -22,7 +20,7 @@ summaryLength = 140
   description = "PigAunt的博客"
   busuanzi = true #启用不算子网页统计
   googleAd = ""  #ca-pub-xxxxxxxxxxxxxx
-  localSearch = true # 启用本地搜索
+  localSearch = true
 
   customCSS = ['douban.css', 'other.css']
   # if ['custom.css'], load '/static/css/custom.css' file
