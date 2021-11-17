@@ -21,6 +21,7 @@ summaryLength = 140
   busuanzi = true #启用不算子网页统计
   googleAd = ""  #ca-pub-xxxxxxxxxxxxxx
   localSearch = true
+  # disqusShortname = "yourdiscussshortname"
 
   customCSS = ['douban.css', 'other.css']
   # if ['custom.css'], load '/static/css/custom.css' file
