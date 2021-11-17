@@ -51,11 +51,11 @@ $$
 \rlap{
     \underbrace{
     \phantom{
-        s_0 \dots s_{i - l} \dots s_i \dots s_{r - l} \dots}}^\text{same}
+        s_0 \dots s_{i - l} \dots s_i \dots s_{r - l} \dots}}_\text{same}
     } 
     s_0 \dots s_{i - l} \dots 
     \overbrace{
-        s_l \dots s_i \dots s_{r - l} \dots s_r}_\text{same} 
+        s_l \dots s_i \dots s_{r - l} \dots s_r}^\text{same} 
 \dots
 $$
 
