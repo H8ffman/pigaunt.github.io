@@ -16,7 +16,7 @@ categories: [
 
 ## 什么是一个数列
 
-其实数列就是一个映射 $f:\mathbb{N} \rarr \mathbb{R}$，下标到值一一对应，也就是一个函数。当然下标可以从 $1$ 开始，值也不一定是实数，因此可以有灵活的变化，如 $g: \mathbb{N^+} \rarr \mathbb{C}$ 也可以表示一个数列。
+其实数列就是一个映射 $f:\mathbb{N} \rightarrow \mathbb{R}$，下标到值一一对应，也就是一个函数。当然下标可以从 $1$ 开始，值也不一定是实数，因此可以有灵活的变化，如 $g: \mathbb{N^+} \rightarrow \mathbb{C}$ 也可以表示一个数列。
 
 本文为了统一，下面给出定义时下标均从 $0$ 开始。
 
@@ -26,7 +26,7 @@ categories: [
 
 直观地看，就类似子序列，从原来的数列里拿几个数出来，组成一个数列。举个例子，$1, 2, 3, 4, 5, \dots$ 的一个子数列就是 $1, 3, 5, \dots$（奇数列）。
 
-要严谨地定义，对于映射 $f:\mathbb{N} \rarr \mathbb{R}$（数列），它的子数列是一个映射 $g: L \rarr \mathbb{R}$，满足 $|L| = +\infty, L \subset \mathbb{N}$ 且 $\forall n \in L, f(n) = g(n)$
+要严谨地定义，对于映射 $f:\mathbb{N} \rightarrow \mathbb{R}$（数列），它的子数列是一个映射 $g: L \rightarrow \mathbb{R}$，满足 $|L| = +\infty, L \subset \mathbb{N}$ 且 $\forall n \in L, f(n) = g(n)$
 。
 
 这里你可能已经发现了一个问题：从原数列里面取一些数，怎么编号表示呢？我们发现，上面的定义里，是使用了原来的编号的。
@@ -42,7 +42,7 @@ categories: [
 **柯西ε-δ语言定义** 对于数列 $\{a_n\}_{n=0}^{+\infty}$，若 $\exist b \in \mathbb{R}, \forall \epsilon > 0, \exist N > 0$，使得 $\forall n > N, |a_n - b| < \epsilon$，则 $\{a_n\}_{n=0}^{+\infty}$ 存在极限，且 $b$ 是它的极限，记作：
 
 $$
-\lim_{n \rarr +\infty} a_n = b
+\lim_{n \rightarrow +\infty} a_n = b
 $$
 
 其实这个定义的意思很清楚，不管 $\epsilon$ 有多小（大于0），总能找到和 $b$ 距离在 $\epsilon$ 内的 $a_n$，因此这个数列是无限趋近于 $b$ 的。
@@ -106,13 +106,13 @@ $$
 因为 $0 < \frac {v_2} {v_1} < 1$，所以：
 
 $$
-\lim_{n \rarr +\infty} (\frac {v_2} {v_1})^{n+1} = 0
+\lim_{n \rightarrow +\infty} (\frac {v_2} {v_1})^{n+1} = 0
 $$
 
 因此：
 
 $$
-\sum_{n=1}^{+\infty} t_n = \lim_{n \rarr +\infty} s_n = \frac {d} {v_1 - v_2} = t
+\sum_{n=1}^{+\infty} t_n = \lim_{n \rightarrow +\infty} s_n = \frac {d} {v_1 - v_2} = t
 $$
 
 所以刘翔追得上乌龟。
