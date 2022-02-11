@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>Z 函数及其求法（扩展 KMP） | PigAunt的博客</title>
+    <meta property="og:title" content="Z 函数及其求法（扩展 KMP） - PigAunt的博客">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2021-11-17T16:13:34&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2021-11-17T16:13:34&#43;08:00'>
+        
+    <meta name="Keywords" content="C&#43;&#43;,OI,C#">
+    <meta name="description" content="Z 函数及其求法（扩展 KMP）">
+        
+    <meta name="author" content="PigAunt">
+    <meta property="og:url" content="https://www.pigaunt.top/post/string/z-algorithm/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+    
+    
+    
+        <link rel="stylesheet" href='/css/douban.css'>
+    
+        <link rel="stylesheet" href='/css/other.css'>
+    
+</head>
+
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://www.pigaunt.top">
+                        PigAunt的博客
+                    </a>
+                
+                <p class="description">Hello, World!</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://www.pigaunt.top">首页</a>
+                    
+                    <a  href="https://www.pigaunt.top/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://www.pigaunt.top/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    
+    <article class="post">
+        <header>
+            <h1 class="post-title">Z 函数及其求法（扩展 KMP）</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2021年11月17日
+        </date>
+        
+        <div class="post-meta">
+            <span>|</span>
+            
+            <span class="meta-category"><a href='/categories/%E5%AD%97%E7%AC%A6%E4%B8%B2'>字符串</a></span>
+            
+            <span class="meta-category"><a href='/categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92'>动态规划</a></span>
+            
+        </div>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <h1 id="z-函数及其求法扩展-kmp">Z 函数及其求法（扩展 KMP）</h1>
+<h2 id="z-函数">Z 函数</h2>
+<p>（以下默认字符串下标从<code>0</code>开始）。</p>
+<p>在 KMP 字符串匹配算法中，使用了$\pi$来表示一个字符串的最长公共前后缀，现在我们介绍一个与公共前缀有关的函数，Z 函数。我们用$z_i$表示一个字符串与它以$i$为起点的后缀的最长公共前缀（LCP）。此外，定义$z_0$为$0$。例如，字符串<code>abcabca</code>的$z$值分别为$0, 0, 0, 4, 0, 0, 1$。</p>
+<h2 id="z-函数的求法">Z 函数的求法</h2>
+<p>根据 Z 函数的定义，我们可以枚举待求字符串的的每一个后缀，从头开始尝试匹配，得到 Z 函数的值。这样计算的时间复杂度是$O(n^2)$。</p>
+<p>参考代码（<code>std::string</code>，字符串下标从<code>0</code>开始）：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">GetZFunc</span>(<span style="color:#ff79c6">const</span> std<span style="color:#ff79c6">::</span>string str)
+{
+    <span style="color:#8be9fd">int</span> len <span style="color:#ff79c6">=</span> str.length();
+    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;</span> len; i<span style="color:#ff79c6">++</span>)
+        <span style="color:#ff79c6">while</span> (i <span style="color:#ff79c6">+</span> z[i] <span style="color:#ff79c6">&lt;</span> len <span style="color:#ff79c6">&amp;&amp;</span> str[z[i]] <span style="color:#ff79c6">==</span> str[i <span style="color:#ff79c6">+</span> z[i]]) 
+            z[i]<span style="color:#ff79c6">++</span>;
+    <span style="color:#ff79c6">return</span>;
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="z-算法在on时间内求出-z-函数">Z 算法（在$O(n)$时间内求出 Z 函数）</h2>
+<p>类似 KMP 字符串匹配中求$\pi$和 Manacher 算法中求最长回文时的优化思路，我们来想一想能不能利用已有信息减少暴力匹配的计算次数。</p>
+<p>为了方便解释，我们把与$s_0 \dots s_{z_i}$匹配的子串$s_i \dots s_{i + z_i - 1}$称为“匹配子串”。我们计算 Z 的时候记录右端点最靠右的“匹配子串”$s_l \dots s_r$，这时如果$i \le r$，那么$s_i \dots s_r$一定与$s_{i - l} \dots s_{r - l}$相同。此时$z_{i - l}$与$z_i$是相同的。但要注意，如果$z_{i - l} \ge r - i + 1$，那么不能保证$r$后面的字符和$r - l$后面的字符匹配，需要暴力尝试。</p>
+<p>如果$i \ge r$，由于没有已知信息可以利用，也需要暴力尝试。</p>
+<p>以上过程可以用下面的图表示：
+$$
+\rlap{
+\underbrace{
+\phantom{
+s_0 \dots s_{i - l} \dots s_i \dots s_{r - l} \dots}}_\text{same}
+}
+s_0 \dots s_{i - l} \dots
+\overbrace{
+s_l \dots s_i \dots s_{r - l} \dots s_r}^\text{same}
+\dots
+$$</p>
+<p>由于$r$只增不减，Z 算法的时间复杂度为$O(n)$。</p>
+<p>参考代码（<code>std::string</code>，字符串下标从<code>0</code>开始）：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">ZAlgorithm</span>(<span style="color:#ff79c6">const</span> std<span style="color:#ff79c6">::</span>string <span style="color:#ff79c6">&amp;</span>str)
+{
+    <span style="color:#8be9fd">int</span> len <span style="color:#ff79c6">=</span> str.length();
+    z[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>, l <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>, r <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> len; i<span style="color:#ff79c6">++</span>)
+    {
+        <span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> z[i <span style="color:#ff79c6">-</span> l];
+        <span style="color:#ff79c6">if</span> (i <span style="color:#ff79c6">&lt;=</span> r <span style="color:#ff79c6">&amp;&amp;</span> k <span style="color:#ff79c6">&lt;</span> r <span style="color:#ff79c6">-</span> i <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>)
+            z[i] <span style="color:#ff79c6">=</span> k;
+        <span style="color:#ff79c6">else</span>
+        {
+            k <span style="color:#ff79c6">=</span> std<span style="color:#ff79c6">::</span>max(r <span style="color:#ff79c6">-</span> i <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">0</span>);
+            <span style="color:#ff79c6">while</span> (i <span style="color:#ff79c6">+</span> k <span style="color:#ff79c6">&lt;</span> len <span style="color:#ff79c6">&amp;&amp;</span> str[i <span style="color:#ff79c6">+</span> k] <span style="color:#ff79c6">==</span> str[k])
+                k<span style="color:#ff79c6">++</span>;
+            z[i] <span style="color:#ff79c6">=</span> k;
+        }
+
+        <span style="color:#ff79c6">if</span> (i <span style="color:#ff79c6">+</span> k <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&gt;</span> r)
+        {
+            l <span style="color:#ff79c6">=</span> i;
+            r <span style="color:#ff79c6">=</span> i <span style="color:#ff79c6">+</span> k <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>;
+        }
+    }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="z-算法的扩展">Z 算法的扩展</h3>
+<p>有些时候，我们需要求某个字符串与另一个字符串后缀的最长公共前缀，该问题的解决方法同上，只是匹配时不再进行自身比较，而是文本串（的后缀）和模式串进行比较。</p>
+<p>但要注意三个细节：</p>
+<ul>
+<li>仍然要取<code>z[i - l]</code>（这意味着要先对文本串做 Z 算法）。因为上面用于加速算法的性质是针对一个字符串的，不能用新的代替。</li>
+<li>匹配时注意边界，文本串和模式串都要判断。</li>
+<li>单独处理$z_0$。单个字符串与自己的最大公共前缀一定是它的长度（Z 函数中只是定义为$0$）扩展处理时如果不定义$z_0 = 0$，应当从头枚举计算$z_0$。</li>
+</ul>
+<p>参考代码（<code>std::string</code>，字符串下标从<code>0</code>开始）：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">// `prev` means the `z` of `text`.
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">ExZAlgorithm</span>(<span style="color:#ff79c6">const</span> std<span style="color:#ff79c6">::</span>string <span style="color:#ff79c6">&amp;</span>text, <span style="color:#ff79c6">const</span> std<span style="color:#ff79c6">::</span>string <span style="color:#ff79c6">&amp;</span>pattern)
+{
+    <span style="color:#8be9fd">int</span> tLen <span style="color:#ff79c6">=</span> text.length(), pLen <span style="color:#ff79c6">=</span> pattern.length();
+    z[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> std<span style="color:#ff79c6">::</span>min(tLen, pLen); i<span style="color:#ff79c6">++</span>)
+    {
+        <span style="color:#ff79c6">if</span> (text[i] <span style="color:#ff79c6">==</span> pattern[i])
+            z[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">++</span>;
+        <span style="color:#ff79c6">else</span>
+            <span style="color:#ff79c6">break</span>;
+    }
+
+    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>, l <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>, r <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> tLen; i<span style="color:#ff79c6">++</span>)
+    {
+        <span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> prev[i <span style="color:#ff79c6">-</span> l]; <span style="color:#6272a4">// not `z`.
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span> (i <span style="color:#ff79c6">&lt;=</span> r <span style="color:#ff79c6">&amp;&amp;</span> k <span style="color:#ff79c6">&lt;</span> r <span style="color:#ff79c6">-</span> i <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>)
+            z[i] <span style="color:#ff79c6">=</span> k;
+        <span style="color:#ff79c6">else</span>
+        {
+            k <span style="color:#ff79c6">=</span> std<span style="color:#ff79c6">::</span>max(r <span style="color:#ff79c6">-</span> i <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">0</span>);
+            <span style="color:#ff79c6">while</span> (i <span style="color:#ff79c6">+</span> k <span style="color:#ff79c6">&lt;</span> tLen <span style="color:#ff79c6">&amp;&amp;</span> k <span style="color:#ff79c6">&lt;</span> pLen <span style="color:#ff79c6">&amp;&amp;</span> text[i <span style="color:#ff79c6">+</span> k] <span style="color:#ff79c6">==</span> pattern[k])
+                k<span style="color:#ff79c6">++</span>;
+            z[i] <span style="color:#ff79c6">=</span> k;
+        }
+
+        <span style="color:#ff79c6">if</span> (i <span style="color:#ff79c6">+</span> k <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&gt;</span> r)
+        {
+            l <span style="color:#ff79c6">=</span> i;
+            r <span style="color:#ff79c6">=</span> i <span style="color:#ff79c6">+</span> k <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>;
+        }
+    }
+}
+</code></pre></td></tr></table>
+</div>
+</div>
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="https://www.pigaunt.top">PigAunt</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://www.pigaunt.top/post/string/z-algorithm/">https://www.pigaunt.top/post/string/z-algorithm/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接）并按照相同协议共享，禁止商业转载。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/post/string/palindrome-and-manacher-algorithm/">回文字符串和 Manacher 算法</a></li>
+        
+        <li><a href="/post/dp/tree-dp/">树形动态规划</a></li>
+        
+        <li><a href="/post/dp/dp-on-numbers/">数位型动态规划</a></li>
+        
+        <li><a href="/post/dp/state-compressed-dp/">状态压缩的动态规划</a></li>
+        
+        <li><a href="/post/dp/lis-and-lcs-problem/">LIS和LCS</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2'>字符串</a></li>
+                
+                <li><a href='/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92'>动态规划</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2022 <a href="https://www.pigaunt.top">PigAunt的博客 By PigAunt</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+    <script src='/js/douban.js'></script>
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://www.pigaunt.top/search/' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://www.pigaunt.top">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://www.pigaunt.top/post/math/seq-limit/" title="数列极限">数列极限</a>
+    </li>
+    
+    <li>
+        <a href="https://www.pigaunt.top/post/string/z-algorithm/" title="Z 函数及其求法（扩展 KMP）">Z 函数及其求法（扩展 KMP）</a>
+    </li>
+    
+    <li>
+        <a href="https://www.pigaunt.top/post/string/palindrome-and-manacher-algorithm/" title="回文字符串和 Manacher 算法">回文字符串和 Manacher 算法</a>
+    </li>
+    
+    <li>
+        <a href="https://www.pigaunt.top/post/dp/tree-dp/" title="树形动态规划">树形动态规划</a>
+    </li>
+    
+    <li>
+        <a href="https://www.pigaunt.top/post/dp/dp-on-numbers/" title="数位型动态规划">数位型动态规划</a>
+    </li>
+    
+    <li>
+        <a href="https://www.pigaunt.top/post/dp/state-compressed-dp/" title="状态压缩的动态规划">状态压缩的动态规划</a>
+    </li>
+    
+    <li>
+        <a href="https://www.pigaunt.top/post/data-structure/monotonous-queue/" title="单调队列">单调队列</a>
+    </li>
+    
+    <li>
+        <a href="https://www.pigaunt.top/post/dp/lis-and-lcs-problem/" title="LIS和LCS">LIS和LCS</a>
+    </li>
+    
+    <li>
+        <a href="https://www.pigaunt.top/post/dp/range-dp/" title="区间型动态规划">区间型动态规划</a>
+    </li>
+    
+    <li>
+        <a href="https://www.pigaunt.top/post/dp/number-triangle/" title="数字三角形">数字三角形</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="https://www.pigaunt.top/categories/misc/">misc (1)</a></li>
+    
+    <li><a href="https://www.pigaunt.top/categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划 (10)</a></li>
+    
+    <li><a href="https://www.pigaunt.top/categories/%E5%AD%97%E7%AC%A6%E4%B8%B2/">字符串 (2)</a></li>
+    
+    <li><a href="https://www.pigaunt.top/categories/%E6%95%B0%E5%AD%A6/">数学 (1)</a></li>
+    
+    <li><a href="https://www.pigaunt.top/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构 (1)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+    <a href="https://www.pigaunt.top/tags/misc/">misc</a>
+    
+    <a href="https://www.pigaunt.top/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a>
+    
+    <a href="https://www.pigaunt.top/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/">字符串</a>
+    
+    <a href="https://www.pigaunt.top/tags/%E6%95%B0%E5%AD%A6/">数学</a>
+    
+    <a href="https://www.pigaunt.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="https://rusun.blog.luogu.org/" title="RuSun的博客">RuSun的博客</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="https://www.pigaunt.top/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
