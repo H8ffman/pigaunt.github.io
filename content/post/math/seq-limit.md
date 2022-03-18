@@ -39,11 +39,13 @@ categories: [
 
 但是怎么给出一个严谨的定义呢？
 
-**柯西ε-δ语言定义** 对于数列 $\\{a\_n\\}\_{n=0}^{+\infty}$，若 $\exists b \in \mathbb{R}, \forall \epsilon > 0, \exists N > 0$，使得 $\forall n > N, |a\_n - b| < \epsilon$，则 $\\{a\_n\\}\_{n=0}^{+\infty}$ 存在极限，且 $b$ 是它的极限，记作：
+**ε-N语言定义** 对于数列 $\\{a\_n\\}\_{n=0}^{+\infty}$，若 $\exists b \in \mathbb{R}, \forall \epsilon > 0, \exists N > 0$，使得 $\forall n > N, |a\_n - b| < \epsilon$，则 $\\{a\_n\\}\_{n=0}^{+\infty}$ 存在极限，且 $b$ 是它的极限，记作：
 
 $$
 \lim\_{n \rightarrow +\infty} a\_n = b
 $$
+
+或简写为 $a\_n \rightarrow b$。
 
 其实这个定义的意思很清楚，不管 $\epsilon$ 有多小（大于0），总能找到和 $b$ 距离在 $\epsilon$ 内的 $a\_n$，因此这个数列是无限趋近于 $b$ 的。
 
@@ -116,3 +118,95 @@ $$
 $$
 
 所以刘翔追得上乌龟。
+
+## 用定义证明数列极限的几个例子
+
+其实关键就在于找一个合适的 $N$。
+
+> 求数列 $a\_n = \frac {1} {n^\alpha}$ 的极限。
+
+取 $\alpha = 1$，极限就是 $0$，但要证明它，我们可以先找一个 $n$，满足：$\frac {1} {n^\alpha} < \epsilon$。
+
+此时可以推出 $n > {\frac 1 \epsilon}^{\frac 1 \alpha}$，那么取 $N = [{\frac 1 \epsilon}^{\frac 1 \alpha}] + 1$，就满足了。
+
+> 求数列 $a\_n = q^n$ 的极限，其中 $|q| < 1, q \in \mathbb{R}$。
+
+取 $q = 0.5$，当 $n = 100$ 时，$q^n$ 约为 $7.8 \times 10^{-31}$，大概极限就是 $0$ 了，现在要找一个 $n$，使 $|q^n| < \epsilon$。
+
+因为 $|q^n| = |q|^n$，我们不用去关心烦人的正负问题，得到 $n > \log\_{|q|} \epsilon$，取 $N = [\log\_{|q|} \epsilon] + 1$，就满足了。
+
+> 求数列 $a\_n = a^{\frac 1 n}$ 的极限，其中 $a > 0$。
+
+取 $a = 1, n = 100$，发现 $a^{\frac 1 n}$ 很接近 $1$，盲猜极限就是 $1$ 了。
+
+要证明，这里就显得有些困难了，之前的极限都是 $0$，方便去绝对值，但是这里就不行了，这里提供一个巧妙的方法：
+
+首先 $a^{\frac 1 n}$ 一定大于 $1$，否则 $n$ 就小于 $0$ 了，这不符合数列的定义。
+
+那么令 $a^{\frac 1 n} = 1 + r$，所以 $a = (1 + r)^n$，把二项式展开，得到：
+
+$$
+a = (1 + r)^n \ge 1 + nr > 0
+$$
+
+要证 $a\_n \rightarrow 1$，其实就是证 $r \rightarrow 0$。发现 $r > -\frac 1 n$
+
+<等待施工>
+
+> 求数列 $a\_n = \frac {\alpha^n} {n!}$ 的极限，其中 $\alpha \in \mathbb{R}$。
+
+取 $a = 1$，得到这个数列的极限是 $0$。
+
+要证明，我们可以考虑有这样一个 $n = M$，$a\_n$ 正好开始小于 $1$，也就是位于分母的数大小两两配对的积 $\ge \alpha^2$。
+
+<等待施工>
+
+## 数列极限的性质和运算
+
+看了上面的一些证明，我们发现用定义求极限特别麻烦。那么数列极限之间有没有运算关系呢？幸运的是，有。
+
+但要证明数列极限之间的运算规律，我们需要再挖掘一些收敛数列的性质。
+
+以下数列若无特殊说明，均**存在极限**，且 $n \rightarrow +\infty$。
+
+### 收敛数列具有有界性
+
+有界就是有一个边界，如果数列 $a\_n$ 满足 $\exists M > 0$ 使得 $\forall n, |a\_n| \le M$，就称这个数列有界，如果能找到一个最小 / 最大的 $M$，就称这个数列有下 / 上确界 $M$。
+
+
+
+现在可以来研究数列极限的运算规律了。
+
+### 数列极限具有线性可加性
+
+> 若 $a\_n \rightarrow A, b\_n \rightarrow B$，则 $(\alpha a\_n + \beta b\_n) \rightarrow (\alpha A + \beta B)$。
+
+证明：由 $a\_n \rightarrow A, b\_n \rightarrow B$，则对 $\forall \epsilon > 0$，$\exists N\_1, N\_2$，使得 $\forall n\_1 > N\_1, n\_2 > N\_2$ 有$|a\_n - A| < \frac {\epsilon} {2(|\alpha|+1)}, |b\_n - B| < \frac {\epsilon} {2(|\beta|+1)}$，所以取 $N = \max\\{N\_1, N\_2\\}$，上面两个都满足了，所以对 $\forall n > N$，有：
+
+$$
+|(\alpha a\_n + \beta b\_n) - (\alpha A + \beta B)| \le |\alpha||a\_n - A| + |\beta||b\_n - B| < \frac {|\alpha|  \epsilon} {2(|\alpha|+1)} + \frac {|\beta| \epsilon} {2(|\beta|+1)} < \frac \epsilon 2 + \frac \epsilon 2 = \epsilon
+$$
+
+看来这个是对的。
+
+### 数列极限具有可乘性
+
+> 若 $a\_n \rightarrow A, b\_n \rightarrow B$，则 $(a\_n b\_n) \rightarrow AB$。
+
+我们可以给 $a\_n b\_n - AB$ 补两项：
+
+$$
+a\_n b\_n - AB = a\_n b\_n + Ab\_n - Ab\_n - AB = b\_n(a\_n - A) - A(b\_n - B)
+$$
+
+类似上面的方法，找一个 $N = \max\\{N\_1, N\_2\\}$，然后根据上式，就能够推出 $|a\_n b\_n - AB| > \epsilon$，但有一个问题，$A$ 是个常数，旁边足够小的时候就满足，但 $b\_n$ 就不一样了，说不定它越来越大呢？所以我们利用**收敛数列的有界性**，发现 $b\_n$ 是有界的，因此当 $N$ 足够大的时候，$b\_n < B'$，这样就能当常数处理了。
+
+### 数列极限具有可除性
+
+> 若 $a\_n \rightarrow A, b\_n \rightarrow B$，且 $B \neq 0$，则 $\frac {a\_n} {b\_n} \rightarrow \frac A B$。
+
+根据数列极限的可乘性，如果 $\lim \frac 1 {b\_n} = \frac 1 {\lim \frac 1 {b\_n}}$，就可以证到了。
+
+所以我们来证 $\lim \frac 1 {b\_n} = \frac 1 {\lim \frac 1 {b\_n}}$。
+
+<等待施工>
