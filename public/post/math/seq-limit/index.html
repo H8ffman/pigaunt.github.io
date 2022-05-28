@@ -113,10 +113,11 @@
 <h2 id="数列的极限">数列的极限</h2>
 <p>什么是数列的极限？举个例子，现在有一个数列 $\{a_n\}_{n=0}^{+\infty} = 1, \frac 1 2, \frac 1 3, \dots$，直观地看，随着 $n$ 的增大，$a_n$ 的值越来越小，感觉上越来越趋近于 $0$。</p>
 <p>但是怎么给出一个严谨的定义呢？</p>
-<p><strong>柯西ε-δ语言定义</strong> 对于数列 $\{a_n\}_{n=0}^{+\infty}$，若 $\exists b \in \mathbb{R}, \forall \epsilon &gt; 0, \exists N &gt; 0$，使得 $\forall n &gt; N, |a_n - b| &lt; \epsilon$，则 $\{a_n\}_{n=0}^{+\infty}$ 存在极限，且 $b$ 是它的极限，记作：</p>
+<p><strong>ε-N语言定义</strong> 对于数列 $\{a_n\}_{n=0}^{+\infty}$，若 $\exists b \in \mathbb{R}, \forall \epsilon &gt; 0, \exists N &gt; 0$，使得 $\forall n &gt; N, |a_n - b| &lt; \epsilon$，则 $\{a_n\}_{n=0}^{+\infty}$ 存在极限，且 $b$ 是它的极限，记作：</p>
 <p>$$
 \lim_{n \rightarrow +\infty} a_n = b
 $$</p>
+<p>或简写为 $a_n \rightarrow b$。</p>
 <p>其实这个定义的意思很清楚，不管 $\epsilon$ 有多小（大于0），总能找到和 $b$ 距离在 $\epsilon$ 内的 $a_n$，因此这个数列是无限趋近于 $b$ 的。</p>
 <h3 id="几个问题">几个问题</h3>
 <h4 id="所有数列都有极限吗"><strong>所有数列都有极限吗？</strong></h4>
@@ -159,6 +160,68 @@ $$</p>
 \sum_{n=1}^{+\infty} t_n = \lim_{n \rightarrow +\infty} s_n = \frac {d} {v_1 - v_2} = t
 $$</p>
 <p>所以刘翔追得上乌龟。</p>
+<h2 id="用定义证明数列极限的几个例子">用定义证明数列极限的几个例子</h2>
+<p>其实关键就在于找一个合适的 $N$。</p>
+<blockquote>
+<p>求数列 $a_n = \frac {1} {n^\alpha}$ 的极限。</p>
+</blockquote>
+<p>取 $\alpha = 1$，极限就是 $0$，但要证明它，我们可以先找一个 $n$，满足：$\frac {1} {n^\alpha} &lt; \epsilon$。</p>
+<p>此时可以推出 $n &gt; {\frac 1 \epsilon}^{\frac 1 \alpha}$，那么取 $N = [{\frac 1 \epsilon}^{\frac 1 \alpha}] + 1$，就满足了。</p>
+<blockquote>
+<p>求数列 $a_n = q^n$ 的极限，其中 $|q| &lt; 1, q \in \mathbb{R}$。</p>
+</blockquote>
+<p>取 $q = 0.5$，当 $n = 100$ 时，$q^n$ 约为 $7.8 \times 10^{-31}$，大概极限就是 $0$ 了，现在要找一个 $n$，使 $|q^n| &lt; \epsilon$。</p>
+<p>因为 $|q^n| = |q|^n$，我们不用去关心烦人的正负问题，得到 $n &gt; \log_{|q|} \epsilon$，取 $N = [\log_{|q|} \epsilon] + 1$，就满足了。</p>
+<blockquote>
+<p>求数列 $a_n = a^{\frac 1 n}$ 的极限，其中 $a &gt; 0$。</p>
+</blockquote>
+<p>取 $a = 1, n = 100$，发现 $a^{\frac 1 n}$ 很接近 $1$，盲猜极限就是 $1$ 了。</p>
+<p>要证明，这里就显得有些困难了，之前的极限都是 $0$，方便去绝对值，但是这里就不行了，这里提供一个巧妙的方法：</p>
+<p>首先 $a^{\frac 1 n}$ 一定大于 $1$，否则 $n$ 就小于 $0$ 了，这不符合数列的定义。</p>
+<p>那么令 $a^{\frac 1 n} = 1 + r$，所以 $a = (1 + r)^n$，把二项式展开，得到：</p>
+<p>$$
+a = (1 + r)^n \ge 1 + nr &gt; 0
+$$</p>
+<p>要证 $a_n \rightarrow 1$，其实就是证 $r \rightarrow 0$。发现 $r &gt; -\frac 1 n$</p>
+<p>&lt;等待施工&gt;</p>
+<blockquote>
+<p>求数列 $a_n = \frac {\alpha^n} {n!}$ 的极限，其中 $\alpha \in \mathbb{R}$。</p>
+</blockquote>
+<p>取 $a = 1$，得到这个数列的极限是 $0$。</p>
+<p>要证明，我们可以考虑有这样一个 $n = M$，$a_n$ 正好开始小于 $1$，也就是位于分母的数大小两两配对的积 $\ge \alpha^2$。</p>
+<p>&lt;等待施工&gt;</p>
+<h2 id="数列极限的性质和运算">数列极限的性质和运算</h2>
+<p>看了上面的一些证明，我们发现用定义求极限特别麻烦。那么数列极限之间有没有运算关系呢？幸运的是，有。</p>
+<p>但要证明数列极限之间的运算规律，我们需要再挖掘一些收敛数列的性质。</p>
+<p>以下数列若无特殊说明，均<strong>存在极限</strong>，且 $n \rightarrow +\infty$。</p>
+<h3 id="收敛数列具有有界性">收敛数列具有有界性</h3>
+<p>有界就是有一个边界，如果数列 $a_n$ 满足 $\exists M &gt; 0$ 使得 $\forall n, |a_n| \le M$，就称这个数列有界，如果能找到一个最小 / 最大的 $M$，就称这个数列有下 / 上确界 $M$。</p>
+<p>现在可以来研究数列极限的运算规律了。</p>
+<h3 id="数列极限具有线性可加性">数列极限具有线性可加性</h3>
+<blockquote>
+<p>若 $a_n \rightarrow A, b_n \rightarrow B$，则 $(\alpha a_n + \beta b_n) \rightarrow (\alpha A + \beta B)$。</p>
+</blockquote>
+<p>证明：由 $a_n \rightarrow A, b_n \rightarrow B$，则对 $\forall \epsilon &gt; 0$，$\exists N_1, N_2$，使得 $\forall n_1 &gt; N_1, n_2 &gt; N_2$ 有$|a_n - A| &lt; \frac {\epsilon} {2(|\alpha|+1)}, |b_n - B| &lt; \frac {\epsilon} {2(|\beta|+1)}$，所以取 $N = \max\{N_1, N_2\}$，上面两个都满足了，所以对 $\forall n &gt; N$，有：</p>
+<p>$$
+|(\alpha a_n + \beta b_n) - (\alpha A + \beta B)| \le |\alpha||a_n - A| + |\beta||b_n - B| &lt; \frac {|\alpha|  \epsilon} {2(|\alpha|+1)} + \frac {|\beta| \epsilon} {2(|\beta|+1)} &lt; \frac \epsilon 2 + \frac \epsilon 2 = \epsilon
+$$</p>
+<p>看来这个是对的。</p>
+<h3 id="数列极限具有可乘性">数列极限具有可乘性</h3>
+<blockquote>
+<p>若 $a_n \rightarrow A, b_n \rightarrow B$，则 $(a_n b_n) \rightarrow AB$。</p>
+</blockquote>
+<p>我们可以给 $a_n b_n - AB$ 补两项：</p>
+<p>$$
+a_n b_n - AB = a_n b_n + Ab_n - Ab_n - AB = b_n(a_n - A) - A(b_n - B)
+$$</p>
+<p>类似上面的方法，找一个 $N = \max\{N_1, N_2\}$，然后根据上式，就能够推出 $|a_n b_n - AB| &gt; \epsilon$，但有一个问题，$A$ 是个常数，旁边足够小的时候就满足，但 $b_n$ 就不一样了，说不定它越来越大呢？所以我们利用<strong>收敛数列的有界性</strong>，发现 $b_n$ 是有界的，因此当 $N$ 足够大的时候，$b_n &lt; B'$，这样就能当常数处理了。</p>
+<h3 id="数列极限具有可除性">数列极限具有可除性</h3>
+<blockquote>
+<p>若 $a_n \rightarrow A, b_n \rightarrow B$，且 $B \neq 0$，则 $\frac {a_n} {b_n} \rightarrow \frac A B$。</p>
+</blockquote>
+<p>根据数列极限的可乘性，如果 $\lim \frac 1 {b_n} = \frac 1 {\lim \frac 1 {b_n}}$，就可以证到了。</p>
+<p>所以我们来证 $\lim \frac 1 {b_n} = \frac 1 {\lim \frac 1 {b_n}}$。</p>
+<p>&lt;等待施工&gt;</p>
 
         </div>
 
@@ -271,6 +334,10 @@ $$</p>
 <ul class="widget-list">
     
     <li>
+        <a href="https://www.pigaunt.top/post/math/matrix/" title="矩阵乘法及应用">矩阵乘法及应用</a>
+    </li>
+    
+    <li>
         <a href="https://www.pigaunt.top/post/math/seq-limit/" title="数列极限">数列极限</a>
     </li>
     
@@ -306,10 +373,6 @@ $$</p>
         <a href="https://www.pigaunt.top/post/dp/range-dp/" title="区间型动态规划">区间型动态规划</a>
     </li>
     
-    <li>
-        <a href="https://www.pigaunt.top/post/dp/number-triangle/" title="数字三角形">数字三角形</a>
-    </li>
-    
 </ul>
     </section>
 
@@ -325,7 +388,7 @@ $$</p>
     
     <li><a href="https://www.pigaunt.top/categories/%E5%AD%97%E7%AC%A6%E4%B8%B2/">字符串 (2)</a></li>
     
-    <li><a href="https://www.pigaunt.top/categories/%E6%95%B0%E5%AD%A6/">数学 (1)</a></li>
+    <li><a href="https://www.pigaunt.top/categories/%E6%95%B0%E5%AD%A6/">数学 (2)</a></li>
     
     <li><a href="https://www.pigaunt.top/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构 (1)</a></li>
     
