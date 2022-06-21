@@ -1,0 +1,529 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>背包问题 - PigAunt 的博客</title><meta name=Description content="这是 PigAunt 的博客"><meta property="og:title" content="背包问题"><meta property="og:description" content="01背包 现在有一个固定容量的背包，和若干体积一定、价值一定的物品，要将一些物品放入背包中，并获得最大的价值。 如果我们已经有了一个装有最大价值"><meta property="og:type" content="article"><meta property="og:url" content="https://www.pigaunt.top/pack-dp/"><meta property="og:image" content="https://www.pigaunt.top/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-08-11T10:50:50+08:00"><meta property="article:modified_time" content="2021-08-11T10:50:50+08:00"><meta property="og:site_name" content="PigAunt 的博客"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.pigaunt.top/logo.png"><meta name=twitter:title content="背包问题"><meta name=twitter:description content="01背包 现在有一个固定容量的背包，和若干体积一定、价值一定的物品，要将一些物品放入背包中，并获得最大的价值。 如果我们已经有了一个装有最大价值"><meta name=application-name content="PigAunt 的博客"><meta name=apple-mobile-web-app-title content="PigAunt 的博客"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.pigaunt.top/pack-dp/><link rel=prev href=https://www.pigaunt.top/hello-world/><link rel=next href=https://www.pigaunt.top/dfa/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=/lib/fontawesome-free/all.min.css as=style onload="this.onload=null,this.rel='stylesheet'"><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload href=/lib/animate/animate.min.css as=style onload="this.onload=null,this.rel='stylesheet'"><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"背包问题","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.pigaunt.top\/pack-dp\/"},"genre":"posts","keywords":"动态规划","wordcount":2942,"url":"https:\/\/www.pigaunt.top\/pack-dp\/","datePublished":"2021-08-11T10:50:50+08:00","dateModified":"2021-08-11T10:50:50+08:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"PigAunt"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="PigAunt 的博客"><img class="lazyload logo" src=/svg/loading.min.svg data-src=/favicon.ico data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x" data-sizes=auto alt=/favicon.ico title=/favicon.ico></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="PigAunt 的博客"><img class="lazyload logo" src=/svg/loading.min.svg data-src=/favicon.ico data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x" data-sizes=auto alt=/favicon.ico title=/favicon.ico></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>Cancel</a></div><a class=menu-item href=/posts/ title>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">背包问题</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.pigaunt.top title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>PigAunt</a></span>&nbsp;<span class=post-category>included in <a href=/categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/><i class="far fa-folder fa-fw" aria-hidden=true></i>动态规划</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2021-08-11>2021-08-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;2942 words&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;6 minutes&nbsp;</div></div><div class="details toc" id=toc-static data-kept=true><div class="details-summary toc-title"><span>Contents</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#01背包>01背包</a><ul><li><a href=#恰好和不超过>恰好和不超过</a></li><li><a href=#空间优化>空间优化</a></li><li><a href=#时间优化>时间优化</a></li></ul></li><li><a href=#完全背包>完全背包</a><ul><li><a href=#为什么不需要考虑物品的数量>为什么不需要考虑物品的数量</a></li></ul></li><li><a href=#多重背包>多重背包</a></li><li><a href=#几个问题优化方式的联系>几个问题优化方式的联系</a></li><li><a href=#背包问题简单变形>背包问题简单变形</a><ul><li><a href=#多维费用>多维费用</a></li><li><a href=#多维价值>多维价值</a></li></ul></li><li><a href=#分组背包>分组背包</a></li><li><a href=#有依赖关系的背包问题>有依赖关系的背包问题</a></li></ul></nav></div></div><div class=content id=content><h2 id=01背包>01背包</h2><p>现在有一个固定容量的背包，和若干体积一定、价值一定的物品，要将一些物品放入背包中，并获得最大的价值。</p><p>如果我们已经有了一个装有最大价值物品的背包，要对它进行扩容，并装入体积为$v_i$，价值为$w_i$的物品，此时最大价值就是原来的价值加上新增物品的价值。如果用$f_{i, j}$表示选到第$i$个物品，总体积为$j$，依照这个思路写出的转移方程如下：</p><p>$$
+f_{i, j} = f_{i - 1, j} \<br>f_{i, j} = \max(f_{i - 1, j - v_i} + w_i)
+$$</p><h3 id=恰好和不超过>恰好和不超过</h3><p>其实认真想想，不管$j$是指“恰好”还是“不超过”，转移方程是不变的。但要注意在初始化的时候，“恰好”型需要将$f_0$外的$f$数组初始化为$-\infty$</p><h3 id=空间优化>空间优化</h3><p>可以发现，$f_{i, j}$由$f_{i - 1, j}$和$f_{i - 1, j - v_i} + w_i$递推而来，只跟上一个状态有关，因此可以将$O(NM)$的空间复杂度优化至$O(M)$，只需要控制倒序循环（先更新大的，保证不会让新的去更新新的）即可。</p><h3 id=时间优化>时间优化</h3><p>因为该问题不受后面信息的影响，可以在读入时直接开始递推。</p><p>模板代码如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-cpp data-lang=cpp><span class=cp>#include</span> <span class=cpf>&lt;iostream&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=k>const</span> <span class=kt>int</span> <span class=n>N</span> <span class=o>=</span> <span class=mi>1005</span><span class=p>,</span> <span class=n>V</span> <span class=o>=</span> <span class=mi>1005</span><span class=p>;</span>
+
+<span class=kt>int</span> <span class=n>n</span><span class=p>,</span> <span class=n>v</span><span class=p>;</span>
+<span class=kt>int</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>N</span><span class=p>],</span> <span class=n>itemWeight</span><span class=p>[</span><span class=n>N</span><span class=p>];</span>
+
+<span class=kt>int</span> <span class=nf>SinglePack</span><span class=p>()</span>
+<span class=p>{</span>
+	<span class=kt>int</span> <span class=n>d</span><span class=p>[</span><span class=n>N</span><span class=p>][</span><span class=n>V</span><span class=p>];</span>
+	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>N</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+		<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>V</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span>
+			<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+	
+	<span class=c1>// subsets of d[i, j]: a. has i; b. without i (d[i - 1, j]).
+</span><span class=c1></span>	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>n</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+	<span class=p>{</span>
+		<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;=</span> <span class=n>v</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span>
+		<span class=p>{</span>
+			<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>d</span><span class=p>[</span><span class=n>i</span> <span class=o>-</span> <span class=mi>1</span><span class=p>][</span><span class=n>j</span><span class=p>];</span>
+			<span class=k>if</span> <span class=p>(</span><span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=n>j</span><span class=p>)</span>
+				<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>max</span><span class=p>(</span><span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>],</span> 
+					<span class=n>d</span><span class=p>[</span><span class=n>i</span> <span class=o>-</span> <span class=mi>1</span><span class=p>][</span><span class=n>j</span> <span class=o>-</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>]]</span> <span class=o>+</span> <span class=n>itemWeight</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+		<span class=p>}</span>
+	<span class=p>}</span>
+	
+	<span class=k>return</span> <span class=n>d</span><span class=p>[</span><span class=n>n</span><span class=p>][</span><span class=n>v</span><span class=p>];</span>
+<span class=p>}</span>
+
+<span class=kt>int</span> <span class=nf>SinglePackOptimized</span><span class=p>()</span>
+<span class=p>{</span>
+	<span class=kt>int</span> <span class=n>d</span><span class=p>[</span><span class=n>V</span><span class=p>];</span>
+	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>V</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+			<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+	
+	<span class=c1>// subsets of d[i, j]: a. has i; b. without i (d[i - 1, j]).
+</span><span class=c1></span>	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>n</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+	<span class=p>{</span>
+		<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=n>v</span><span class=p>;</span> <span class=n>j</span> <span class=o>&gt;=</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>];</span> <span class=n>j</span><span class=o>--</span><span class=p>)</span>
+		<span class=p>{</span>
+			<span class=n>d</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>max</span><span class=p>(</span><span class=n>d</span><span class=p>[</span><span class=n>j</span><span class=p>],</span> <span class=n>d</span><span class=p>[</span><span class=n>j</span> <span class=o>-</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>]]</span> <span class=o>+</span> <span class=n>itemWeight</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+		<span class=p>}</span>
+	<span class=p>}</span>
+	
+	<span class=k>return</span> <span class=n>d</span><span class=p>[</span><span class=n>v</span><span class=p>];</span>
+<span class=p>}</span>
+
+<span class=kt>int</span> <span class=nf>main</span><span class=p>()</span>
+<span class=p>{</span>
+	<span class=n>std</span><span class=o>::</span><span class=n>cin</span> <span class=o>&gt;&gt;</span> <span class=n>n</span> <span class=o>&gt;&gt;</span> <span class=n>v</span><span class=p>;</span>
+	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>n</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+		<span class=n>std</span><span class=o>::</span><span class=n>cin</span> <span class=o>&gt;&gt;</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&gt;&gt;</span> <span class=n>itemWeight</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+	
+	<span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>SinglePack</span><span class=p>()</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+	<span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><h2 id=完全背包>完全背包</h2><p>和01背包类似，只是物品的数量变成了无限个。</p><p>由于物品由无限个，此时当前状态可以用于更新当前状态，因此将循环顺序改为从小到大即可。</p><h3 id=为什么不需要考虑物品的数量>为什么不需要考虑物品的数量</h3><p>显然，考虑物品的数量可以正确解决问题，但时间复杂度升至$O(NM^2)$，实在是太慢了。</p><p>如果第$i$个物品可以装$s_i$个，那么$f_{i, j}$和$f_{i, j - v_i}$可以这样转移:</p><p>$$
+f_{i, j} = \max(f_{i - 1, j}, f_{i - 1, j - v_i} + w_i, f_{i - 1, j - 2v_i} + 2w_i, \dots, f_{i - 1, j - s_i v_i} + s_i w_i)
+$$
+$$
+f_{i, j - v_i} = \max(f_{i - 1, j - v_i}, f_{i - 1, j - 2v_i} + w_i, f_{i - 1, j - 3v_i} + 2w_i, \dots, f_{i - 1, j - s_i v_i} + (s_i - 1)w_i)
+$$</p><p>发现$f_{i, j - v_i} + w_i$其实就是$f_{i, j}$转移中$f_{i - 1, j}$后面所有项的最大值，因此转移方程简化如下：</p><p>$$
+f_{i, j} = \max(f_{i - 1, j}, f_{i, j - v_i} + w_i)
+$$</p><p>再应用上面提到的空间优化，得到下面的代码</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-cpp data-lang=cpp><span class=cp>#include</span> <span class=cpf>&lt;iostream&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=k>const</span> <span class=kt>int</span> <span class=n>N</span> <span class=o>=</span> <span class=mi>1005</span><span class=p>,</span> <span class=n>V</span> <span class=o>=</span> <span class=mi>1005</span><span class=p>;</span>
+
+<span class=kt>int</span> <span class=n>n</span><span class=p>,</span> <span class=n>v</span><span class=p>;</span>
+<span class=kt>int</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>N</span><span class=p>],</span> <span class=n>itemWeight</span><span class=p>[</span><span class=n>N</span><span class=p>];</span>
+
+<span class=kt>int</span> <span class=nf>FullPack</span><span class=p>()</span>
+<span class=p>{</span>
+	<span class=kt>int</span> <span class=n>d</span><span class=p>[</span><span class=n>N</span><span class=p>][</span><span class=n>V</span><span class=p>];</span>
+	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>N</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+		<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>V</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span>
+			<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+	
+	<span class=c1>// subsets of d[i, j]: a. has i; b. without i (d[i - 1, j]).
+</span><span class=c1></span>	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>n</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+	<span class=p>{</span>
+		<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>];</span> <span class=n>j</span> <span class=o>&lt;=</span> <span class=n>v</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span>
+		<span class=p>{</span>
+			<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>k</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>k</span> <span class=o>*</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=n>j</span><span class=p>;</span> <span class=n>k</span><span class=o>++</span><span class=p>)</span>
+			<span class=p>{</span>
+				<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>max</span><span class=p>(</span><span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>],</span> 
+					<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span> <span class=o>-</span> <span class=n>k</span> <span class=o>*</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>]]</span> <span class=o>+</span> <span class=n>k</span> <span class=o>*</span> <span class=n>itemWeight</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+			<span class=p>}</span>
+		<span class=p>}</span>
+	<span class=p>}</span>
+	
+	<span class=k>return</span> <span class=n>d</span><span class=p>[</span><span class=n>n</span><span class=p>][</span><span class=n>v</span><span class=p>];</span>
+<span class=p>}</span>
+
+<span class=kt>int</span> <span class=nf>FullPackOptimized</span><span class=p>()</span>
+<span class=p>{</span>
+	<span class=kt>int</span> <span class=n>d</span><span class=p>[</span><span class=n>N</span><span class=p>][</span><span class=n>V</span><span class=p>];</span>
+	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>N</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+		<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>V</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span>
+			<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+	
+	<span class=c1>// subsets of d[i, j]: a. has i; b. without i (d[i - 1, j]).
+</span><span class=c1></span>	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>n</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+	<span class=p>{</span>
+		<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;=</span> <span class=n>v</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span>
+		<span class=p>{</span>
+			<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>d</span><span class=p>[</span><span class=n>i</span> <span class=o>-</span> <span class=mi>1</span><span class=p>][</span><span class=n>j</span><span class=p>];</span>
+			<span class=k>if</span> <span class=p>(</span><span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=n>j</span><span class=p>)</span>
+				<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>max</span><span class=p>(</span><span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>],</span> 
+					<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span> <span class=o>-</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>]]</span> <span class=o>+</span> <span class=n>itemWeight</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+		<span class=p>}</span>
+	<span class=p>}</span>
+	
+	<span class=k>return</span> <span class=n>d</span><span class=p>[</span><span class=n>n</span><span class=p>][</span><span class=n>v</span><span class=p>];</span>
+<span class=p>}</span>
+
+<span class=kt>int</span> <span class=nf>FullPackFullOptimized</span><span class=p>()</span>
+<span class=p>{</span>
+	<span class=kt>int</span> <span class=n>d</span><span class=p>[</span><span class=n>V</span><span class=p>];</span>
+	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>V</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+			<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+	
+	<span class=c1>// subsets of d[i, j]: a. has i; b. without i (d[i - 1, j]).
+</span><span class=c1></span>	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>n</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+	<span class=p>{</span>
+		<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>];</span> <span class=n>j</span> <span class=o>&lt;=</span> <span class=n>v</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span>
+		<span class=p>{</span>
+			<span class=n>d</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>max</span><span class=p>(</span><span class=n>d</span><span class=p>[</span><span class=n>j</span><span class=p>],</span> <span class=n>d</span><span class=p>[</span><span class=n>j</span> <span class=o>-</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>]]</span> <span class=o>+</span> <span class=n>itemWeight</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+		<span class=p>}</span>
+	<span class=p>}</span>
+	
+	<span class=k>return</span> <span class=n>d</span><span class=p>[</span><span class=n>v</span><span class=p>];</span>
+<span class=p>}</span>
+
+<span class=kt>int</span> <span class=nf>main</span><span class=p>()</span>
+<span class=p>{</span>
+	<span class=n>std</span><span class=o>::</span><span class=n>cin</span> <span class=o>&gt;&gt;</span> <span class=n>n</span> <span class=o>&gt;&gt;</span> <span class=n>v</span><span class=p>;</span>
+	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>n</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+		<span class=n>std</span><span class=o>::</span><span class=n>cin</span> <span class=o>&gt;&gt;</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&gt;&gt;</span> <span class=n>itemWeight</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+	
+	<span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>FullPackOptimized</span><span class=p>()</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+	<span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><h2 id=多重背包>多重背包</h2><p>多重背包与完全背包类似，但限定了每种物品的数量。</p><p>首先这个问题可以用完全背包优化前的算法，但时间复杂度太高，我们可以考虑用二进制拼凑思想优化，即把多个物品合并成由2的非负整数次幂的几个物品组，然后做01背包，时间复杂度$O(M \log N)$</p><p>可以用优化完全背包的方式优化多重背包吗？我们尝试写出$f_{i, j}$到$f_{i, j - s_i v_ i}$的转移方程：</p><p>$$
+f_{i, j} = \max(f_{i - 1, j}, f_{i - 1, j - v} + w, \dots, f_{i - 1, j - s_i v_i} + s_i w_i)
+$$
+$$
+f_{i, j - v} = \max(f_{i - 1, j - v}, f_{i - 1, j - 2v} + w, \dots, f_{i - 1, j - (s_i + 1)v_i} + s_i w_i)
+$$</p><p>发现$f_{i, j - v} + w$并不能像完全背包一样对齐，而是少了$f_{i - 1, j}$，多出了$f_{i - 1, j - (s_i + 1)v_i} + (s_i + 1)w_i$。以此类推，在不出边界的情况下，之后的$f_{i - 1, j - 2v}$直到$f_{i - 1, j - s_i v_i}$都是如此，就像是一个长度为$s$的窗口滑出。因此，要求每一个状态的最大值，只需要求它前面滑动窗口中状态的最大值。</p><p>要求滑动窗口的最大值，可以用单调队列。</p><h2 id=几个问题优化方式的联系>几个问题优化方式的联系</h2><p>我们发现，完全背包和多重背包优化的关键都在于把一类数的特征由一个数或一个更快找出这个特征的数据结构中的数等价替换。</p><h2 id=背包问题简单变形>背包问题简单变形</h2><h3 id=多维费用>多维费用</h3><p><a href=http://noi.openjudge.cn/ch0206/4978/ target=_blank rel="noopener noreffer ">CH0206-4978-宠物小精灵之收服</a></p><p>这个题就是典型的二维费用的背包问题，状态定义只需要增加一维表示第二种费用。但本题要注意，“当皮卡丘的体力小于等于0时，小智就必须结束狩猎（因为他需要给皮卡丘疗伤），而使得皮卡丘体力小于等于0的野生小精灵也不会被小智收服”，所以答案不是$f_{n, m}$而是$f_{n, m - 1}$，有些题库，包括我校校内题库，没有考虑这一点，导致正解不能AC。</p><p>AC代码：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-cpp data-lang=cpp><span class=cp>#include</span> <span class=cpf>&lt;iostream&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=k>const</span> <span class=kt>int</span> <span class=n>N</span> <span class=o>=</span> <span class=mi>1005</span><span class=p>,</span> <span class=n>M</span> <span class=o>=</span> <span class=mi>505</span><span class=p>;</span>
+
+<span class=kt>int</span> <span class=n>n</span><span class=p>,</span> <span class=n>m</span><span class=p>,</span> <span class=n>k</span><span class=p>;</span>
+<span class=kt>int</span> <span class=n>f</span><span class=p>[</span><span class=n>N</span><span class=p>][</span><span class=n>M</span><span class=p>];</span>
+
+<span class=kt>int</span> <span class=nf>main</span><span class=p>()</span>
+<span class=p>{</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>cin</span> <span class=o>&gt;&gt;</span> <span class=n>n</span> <span class=o>&gt;&gt;</span> <span class=n>m</span> <span class=o>&gt;&gt;</span> <span class=n>k</span><span class=p>;</span>
+    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>k</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+    <span class=p>{</span>
+        <span class=kt>int</span> <span class=n>ball</span><span class=p>,</span> <span class=n>hp</span><span class=p>;</span>
+        <span class=n>std</span><span class=o>::</span><span class=n>cin</span> <span class=o>&gt;&gt;</span> <span class=n>ball</span> <span class=o>&gt;&gt;</span> <span class=n>hp</span><span class=p>;</span>
+        <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=n>n</span><span class=p>;</span> <span class=n>j</span> <span class=o>&gt;=</span> <span class=n>ball</span><span class=p>;</span> <span class=n>j</span><span class=o>--</span><span class=p>)</span>
+            <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>t</span> <span class=o>=</span> <span class=n>m</span><span class=p>;</span> <span class=n>t</span> <span class=o>&gt;=</span> <span class=n>hp</span><span class=p>;</span> <span class=n>t</span><span class=o>--</span><span class=p>)</span>
+                <span class=n>f</span><span class=p>[</span><span class=n>j</span><span class=p>][</span><span class=n>t</span><span class=p>]</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>max</span><span class=p>(</span><span class=n>f</span><span class=p>[</span><span class=n>j</span><span class=p>][</span><span class=n>t</span><span class=p>],</span> <span class=n>f</span><span class=p>[</span><span class=n>j</span> <span class=o>-</span> <span class=n>ball</span><span class=p>][</span><span class=n>t</span> <span class=o>-</span> <span class=n>hp</span><span class=p>]</span> <span class=o>+</span> <span class=mi>1</span><span class=p>);</span>
+    <span class=p>}</span>
+    
+    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>f</span><span class=p>[</span><span class=n>n</span><span class=p>][</span><span class=n>m</span> <span class=o>-</span> <span class=mi>1</span><span class=p>]</span> <span class=o>&lt;&lt;</span> <span class=s>&#34; &#34;</span><span class=p>;</span>
+    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>m</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+        <span class=k>if</span> <span class=p>(</span><span class=n>f</span><span class=p>[</span><span class=n>n</span><span class=p>][</span><span class=n>i</span><span class=p>]</span> <span class=o>==</span> <span class=n>f</span><span class=p>[</span><span class=n>n</span><span class=p>][</span><span class=n>m</span> <span class=o>-</span> <span class=mi>1</span><span class=p>])</span>
+        <span class=p>{</span>
+            <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>m</span> <span class=o>-</span> <span class=n>i</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+            <span class=k>break</span><span class=p>;</span>
+        <span class=p>}</span>
+    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><h3 id=多维价值>多维价值</h3><p>这个很少见，如果有要么考虑各种价值的优先级，要么考虑将多种价值转换为一种。</p><h2 id=分组背包>分组背包</h2><p>在01背包的基础上，将物品划为多个组，要求每组至多取一个物品，总价值的最大值。</p><p>要解决分组背包问题，只需要在状态定义中加一维，表示组数即可，但要注意控制循环层级，第一层为组数（可以看作物品，因为每组只选一个），第二层体积，第三层组中物品。</p><p>示例代码：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-cpp data-lang=cpp><span class=cp>#include</span> <span class=cpf>&lt;iostream&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=k>const</span> <span class=kt>int</span> <span class=n>N</span> <span class=o>=</span> <span class=mi>105</span><span class=p>,</span> <span class=n>V</span> <span class=o>=</span> <span class=mi>105</span><span class=p>,</span> <span class=n>S</span> <span class=o>=</span> <span class=mi>105</span><span class=p>;</span>
+
+<span class=kt>int</span> <span class=n>n</span><span class=p>,</span> <span class=n>v</span><span class=p>,</span> <span class=n>s</span><span class=p>[</span><span class=n>N</span><span class=p>];</span>
+<span class=kt>int</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>S</span><span class=p>][</span><span class=n>N</span><span class=p>],</span> <span class=n>itemWeight</span><span class=p>[</span><span class=n>S</span><span class=p>][</span><span class=n>N</span><span class=p>];</span>
+
+<span class=kt>int</span> <span class=nf>GroupPackOptimized</span><span class=p>()</span>
+<span class=p>{</span>
+	<span class=kt>int</span> <span class=n>d</span><span class=p>[</span><span class=n>V</span><span class=p>];</span>
+	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>V</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+			<span class=n>d</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+	
+	<span class=c1>// subsets of d[i, j]: a. has i; b. without i (d[i - 1, j]).
+</span><span class=c1></span>	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>g</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>g</span> <span class=o>&lt;=</span> <span class=n>n</span><span class=p>;</span> <span class=n>g</span><span class=o>++</span><span class=p>)</span>
+	<span class=p>{</span>
+		<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=n>v</span><span class=p>;</span> <span class=n>j</span> <span class=o>&gt;=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span><span class=o>--</span><span class=p>)</span>
+		<span class=p>{</span>
+			<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>s</span><span class=p>[</span><span class=n>g</span><span class=p>];</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+			<span class=p>{</span>
+				<span class=k>if</span> <span class=p>(</span><span class=n>itemSpace</span><span class=p>[</span><span class=n>g</span><span class=p>][</span><span class=n>i</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=n>j</span><span class=p>)</span>
+				<span class=n>d</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>max</span><span class=p>(</span><span class=n>d</span><span class=p>[</span><span class=n>j</span><span class=p>],</span> <span class=n>d</span><span class=p>[</span><span class=n>j</span> <span class=o>-</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>g</span><span class=p>][</span><span class=n>i</span><span class=p>]]</span> <span class=o>+</span> <span class=n>itemWeight</span><span class=p>[</span><span class=n>g</span><span class=p>][</span><span class=n>i</span><span class=p>]);</span>
+			<span class=p>}</span>
+		<span class=p>}</span>
+	<span class=p>}</span>
+	
+	<span class=k>return</span> <span class=n>d</span><span class=p>[</span><span class=n>v</span><span class=p>];</span>
+<span class=p>}</span>
+
+<span class=kt>int</span> <span class=nf>main</span><span class=p>()</span>
+<span class=p>{</span>
+	<span class=n>std</span><span class=o>::</span><span class=n>cin</span> <span class=o>&gt;&gt;</span> <span class=n>n</span> <span class=o>&gt;&gt;</span> <span class=n>v</span><span class=p>;</span>
+	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>n</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+	<span class=p>{</span>
+		<span class=n>std</span><span class=o>::</span><span class=n>cin</span> <span class=o>&gt;&gt;</span> <span class=n>s</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+		<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>s</span><span class=p>[</span><span class=n>i</span><span class=p>];</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span>
+		<span class=p>{</span>
+			<span class=n>std</span><span class=o>::</span><span class=n>cin</span> <span class=o>&gt;&gt;</span> <span class=n>itemSpace</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>]</span> <span class=o>&gt;&gt;</span> <span class=n>itemWeight</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>j</span><span class=p>];</span>
+		<span class=p>}</span>
+	<span class=p>}</span>
+	
+	<span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>GroupPackOptimized</span><span class=p>()</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+	<span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><h2 id=有依赖关系的背包问题>有依赖关系的背包问题</h2><p>这类问题有些可以通过转化成为分组背包问题，有一些只能通过树形动态规划解决。下面这一题可以转化为分组背包问题：</p><p><a href=https://www.luogu.com.cn/problem/P1064 target=_blank rel="noopener noreffer ">洛谷-P1064-NOIP2006提高组 金明的预算方案</a></p><p>由于本题附件最多有两个，可以拆分成不同选法，放在一个组里。AC代码：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-cpp data-lang=cpp><span class=cp>#include</span> <span class=cpf>&lt;iostream&gt;</span><span class=cp>
+</span><span class=cp>#include</span> <span class=cpf>&lt;vector&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=k>const</span> <span class=kt>int</span> <span class=n>N</span> <span class=o>=</span> <span class=mi>65</span><span class=p>,</span> <span class=n>M</span> <span class=o>=</span> <span class=mi>32005</span><span class=p>;</span>
+
+<span class=k>struct</span> <span class=nc>Item</span>
+<span class=p>{</span>
+    <span class=n>Item</span><span class=p>(</span><span class=kt>int</span> <span class=n>v</span><span class=p>,</span> <span class=kt>int</span> <span class=n>w</span><span class=p>)</span> <span class=o>:</span> <span class=n>v</span><span class=p>(</span><span class=n>v</span><span class=p>),</span> <span class=n>w</span><span class=p>(</span><span class=n>w</span><span class=p>)</span> <span class=p>{}</span>
+    <span class=kt>int</span> <span class=n>v</span><span class=p>;</span>
+    <span class=kt>int</span> <span class=n>w</span><span class=p>;</span>
+<span class=p>};</span>
+
+<span class=kt>int</span> <span class=n>m</span><span class=p>,</span> <span class=n>n</span><span class=p>;</span>
+<span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>Item</span><span class=o>&gt;</span> <span class=n>items</span><span class=p>[</span><span class=n>N</span><span class=p>];</span>
+<span class=kt>int</span> <span class=n>f</span><span class=p>[</span><span class=n>M</span><span class=p>];</span>
+
+<span class=kt>int</span> <span class=nf>main</span><span class=p>()</span>
+<span class=p>{</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>cin</span> <span class=o>&gt;&gt;</span> <span class=n>m</span> <span class=o>&gt;&gt;</span> <span class=n>n</span><span class=p>;</span>
+    <span class=kt>int</span> <span class=n>v</span><span class=p>,</span> <span class=n>w</span><span class=p>,</span> <span class=n>dep</span><span class=p>;</span>
+    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>n</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+    <span class=p>{</span>
+        <span class=n>std</span><span class=o>::</span><span class=n>cin</span> <span class=o>&gt;&gt;</span> <span class=n>v</span> <span class=o>&gt;&gt;</span> <span class=n>w</span> <span class=o>&gt;&gt;</span> <span class=n>dep</span><span class=p>;</span>
+
+        <span class=kt>int</span> <span class=n>len</span> <span class=o>=</span> <span class=n>items</span><span class=p>[</span><span class=n>dep</span><span class=p>].</span><span class=n>size</span><span class=p>();</span>
+        <span class=k>if</span> <span class=p>(</span><span class=n>dep</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span>
+            <span class=n>items</span><span class=p>[</span><span class=n>i</span><span class=p>].</span><span class=n>push_back</span><span class=p>(</span><span class=n>Item</span><span class=p>(</span><span class=n>v</span><span class=p>,</span> <span class=n>v</span> <span class=o>*</span> <span class=n>w</span><span class=p>));</span>
+        <span class=k>else</span>
+            <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>len</span><span class=p>;</span> <span class=n>j</span><span class=o>++</span><span class=p>)</span>
+                <span class=n>items</span><span class=p>[</span><span class=n>dep</span><span class=p>].</span><span class=n>push_back</span><span class=p>(</span><span class=n>Item</span><span class=p>(</span><span class=n>items</span><span class=p>[</span><span class=n>dep</span><span class=p>][</span><span class=n>j</span><span class=p>].</span><span class=n>v</span> <span class=o>+</span> <span class=n>v</span><span class=p>,</span> <span class=n>items</span><span class=p>[</span><span class=n>dep</span><span class=p>][</span><span class=n>j</span><span class=p>].</span><span class=n>w</span> <span class=o>+</span> <span class=n>v</span> <span class=o>*</span> <span class=n>w</span><span class=p>));</span>
+    <span class=p>}</span>
+
+    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>n</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+        <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=n>m</span><span class=p>;</span> <span class=n>j</span> <span class=o>&gt;=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span><span class=o>--</span><span class=p>)</span>
+        <span class=p>{</span>
+            <span class=kt>int</span> <span class=n>len</span> <span class=o>=</span> <span class=n>items</span><span class=p>[</span><span class=n>i</span><span class=p>].</span><span class=n>size</span><span class=p>();</span>
+            <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>k</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>k</span> <span class=o>&lt;</span> <span class=n>len</span><span class=p>;</span> <span class=n>k</span><span class=o>++</span><span class=p>)</span>
+                <span class=k>if</span> <span class=p>(</span><span class=n>j</span> <span class=o>-</span> <span class=n>items</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>k</span><span class=p>].</span><span class=n>v</span> <span class=o>&gt;=</span> <span class=mi>0</span><span class=p>)</span>
+                    <span class=n>f</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>max</span><span class=p>(</span><span class=n>f</span><span class=p>[</span><span class=n>j</span><span class=p>],</span> <span class=n>f</span><span class=p>[</span><span class=n>j</span> <span class=o>-</span> <span class=n>items</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>k</span><span class=p>].</span><span class=n>v</span><span class=p>]</span> <span class=o>+</span> <span class=n>items</span><span class=p>[</span><span class=n>i</span><span class=p>][</span><span class=n>k</span><span class=p>].</span><span class=n>w</span><span class=p>);</span>
+        <span class=p>}</span>
+
+    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>f</span><span class=p>[</span><span class=n>m</span><span class=p>]</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><p>更复杂的情况需要考虑树形动态规划。</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2021-08-11</span></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/pack-dp/index.md target=_blank>Read Markdown</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://www.pigaunt.top/pack-dp/ data-title=背包问题 data-hashtags=动态规划><i class="fab fa-twitter fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://www.pigaunt.top/pack-dp/ data-hashtag=动态规划><i class="fab fa-facebook-square fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Hacker News" data-sharer=hackernews data-url=https://www.pigaunt.top/pack-dp/ data-title=背包问题><i class="fab fa-hacker-news fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://www.pigaunt.top/pack-dp/ data-title=背包问题><i data-svg-src=/lib/simple-icons/icons/line.min.svg aria-hidden=true></i></a><a href=javascript:void(0); title="Share on 微博" data-sharer=weibo data-url=https://www.pigaunt.top/pack-dp/ data-title=背包问题><i class="fab fa-weibo fa-fw" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/>动态规划</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span></section></div><div class=post-nav><a href=/hello-world/ class=prev rel=prev title="Hello World"><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>Hello World</a>
+<a href=/dfa/ class=next rel=next title=状态机>状态机<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.83.1">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden=true></i> LoveIt</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2021 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://www.pigaunt.top target=_blank>PigAunt</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/lunr/lunr.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/contrib/auto-render.min.js></script><script type=text/javascript src=/lib/katex/contrib/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/contrib/mhchem.min.js></script><script type=text/javascript src=/lib/cookieconsent/cookieconsent.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:50},comment:{},cookieconsent:{content:{dismiss:"Got it!",link:"Learn more",message:"This website uses Cookies to improve your experience."},enable:!0,palette:{button:{background:"#f0f0f0"},popup:{background:"#1aa3ff"}},theme:"edgeless"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{highlightTag:"em",lunrIndexURL:"/index.json",maxResultLength:10,noResultsFound:"No results found",snippetLength:50,type:"lunr"}}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

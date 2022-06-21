@@ -1,0 +1,154 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Z 函数及其求法（扩展 KMP） - PigAunt 的博客</title><meta name=Description content="这是 PigAunt 的博客"><meta property="og:title" content="Z 函数及其求法（扩展 KMP）"><meta property="og:description" content="Z 函数 （以下默认字符串下标从0开始）。 在 KMP 字符串匹配算法中，使用了$\pi$来表示一个字符串的最长公共前后缀，现在我们介绍一个与公共前缀有关"><meta property="og:type" content="article"><meta property="og:url" content="https://www.pigaunt.top/z-algorithm/"><meta property="og:image" content="https://www.pigaunt.top/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-11-17T16:13:34+08:00"><meta property="article:modified_time" content="2021-11-17T16:13:34+08:00"><meta property="og:site_name" content="PigAunt 的博客"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.pigaunt.top/logo.png"><meta name=twitter:title content="Z 函数及其求法（扩展 KMP）"><meta name=twitter:description content="Z 函数 （以下默认字符串下标从0开始）。 在 KMP 字符串匹配算法中，使用了$\pi$来表示一个字符串的最长公共前后缀，现在我们介绍一个与公共前缀有关"><meta name=application-name content="PigAunt 的博客"><meta name=apple-mobile-web-app-title content="PigAunt 的博客"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.pigaunt.top/z-algorithm/><link rel=prev href=https://www.pigaunt.top/palindrome-and-manacher-algorithm/><link rel=next href=https://www.pigaunt.top/matrix/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=/lib/fontawesome-free/all.min.css as=style onload="this.onload=null,this.rel='stylesheet'"><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload href=/lib/animate/animate.min.css as=style onload="this.onload=null,this.rel='stylesheet'"><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Z 函数及其求法（扩展 KMP）","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.pigaunt.top\/z-algorithm\/"},"genre":"posts","keywords":"字符串, 动态规划","wordcount":1286,"url":"https:\/\/www.pigaunt.top\/z-algorithm\/","datePublished":"2021-11-17T16:13:34+08:00","dateModified":"2021-11-17T16:13:34+08:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"PigAunt"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="PigAunt 的博客"><img class="lazyload logo" src=/svg/loading.min.svg data-src=/favicon.ico data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x" data-sizes=auto alt=/favicon.ico title=/favicon.ico></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="PigAunt 的博客"><img class="lazyload logo" src=/svg/loading.min.svg data-src=/favicon.ico data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x" data-sizes=auto alt=/favicon.ico title=/favicon.ico></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>Cancel</a></div><a class=menu-item href=/posts/ title>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Z 函数及其求法（扩展 KMP）</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.pigaunt.top title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>PigAunt</a></span>&nbsp;<span class=post-category>included in <a href=/categories/%E5%AD%97%E7%AC%A6%E4%B8%B2/><i class="far fa-folder fa-fw" aria-hidden=true></i>字符串</a>&nbsp;<a href=/categories/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/><i class="far fa-folder fa-fw" aria-hidden=true></i>动态规划</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2021-11-17>2021-11-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;1286 words&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;3 minutes&nbsp;</div></div><div class="details toc" id=toc-static data-kept=true><div class="details-summary toc-title"><span>Contents</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#z-函数>Z 函数</a></li><li><a href=#z-函数的求法>Z 函数的求法</a></li><li><a href=#z-算法在on时间内求出-z-函数>Z 算法（在$O(n)$时间内求出 Z 函数）</a><ul><li><a href=#z-算法的扩展>Z 算法的扩展</a></li></ul></li></ul></nav></div></div><div class=content id=content><h2 id=z-函数>Z 函数</h2><p>（以下默认字符串下标从<code>0</code>开始）。</p><p>在 KMP 字符串匹配算法中，使用了$\pi$来表示一个字符串的最长公共前后缀，现在我们介绍一个与公共前缀有关的函数，Z 函数。我们用$z_i$表示一个字符串与它以$i$为起点的后缀的最长公共前缀（LCP）。此外，定义$z_0$为$0$。例如，字符串<code>abcabca</code>的$z$值分别为$0, 0, 0, 4, 0, 0, 1$。</p><h2 id=z-函数的求法>Z 函数的求法</h2><p>根据 Z 函数的定义，我们可以枚举待求字符串的的每一个后缀，从头开始尝试匹配，得到 Z 函数的值。这样计算的时间复杂度是$O(n^2)$。</p><p>参考代码（<code>std::string</code>，字符串下标从<code>0</code>开始）：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-cpp data-lang=cpp><span class=kt>void</span> <span class=nf>GetZFunc</span><span class=p>(</span><span class=k>const</span> <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=n>str</span><span class=p>)</span>
+<span class=p>{</span>
+    <span class=kt>int</span> <span class=n>len</span> <span class=o>=</span> <span class=n>str</span><span class=p>.</span><span class=n>length</span><span class=p>();</span>
+    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>len</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+        <span class=k>while</span> <span class=p>(</span><span class=n>i</span> <span class=o>+</span> <span class=n>z</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&lt;</span> <span class=n>len</span> <span class=o>&amp;&amp;</span> <span class=n>str</span><span class=p>[</span><span class=n>z</span><span class=p>[</span><span class=n>i</span><span class=p>]]</span> <span class=o>==</span> <span class=n>str</span><span class=p>[</span><span class=n>i</span> <span class=o>+</span> <span class=n>z</span><span class=p>[</span><span class=n>i</span><span class=p>]])</span> 
+            <span class=n>z</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>++</span><span class=p>;</span>
+    <span class=k>return</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><h2 id=z-算法在on时间内求出-z-函数>Z 算法（在$O(n)$时间内求出 Z 函数）</h2><p>类似 KMP 字符串匹配中求$\pi$和 Manacher 算法中求最长回文时的优化思路，我们来想一想能不能利用已有信息减少暴力匹配的计算次数。</p><p>为了方便解释，我们把与$s_0 \dots s_{z_i}$匹配的子串$s_i \dots s_{i + z_i - 1}$称为“匹配子串”。我们计算 Z 的时候记录右端点最靠右的“匹配子串”$s_l \dots s_r$，这时如果$i \le r$，那么$s_i \dots s_r$一定与$s_{i - l} \dots s_{r - l}$相同。此时$z_{i - l}$与$z_i$是相同的。但要注意，如果$z_{i - l} \ge r - i + 1$，那么不能保证$r$后面的字符和$r - l$后面的字符匹配，需要暴力尝试。</p><p>如果$i \ge r$，由于没有已知信息可以利用，也需要暴力尝试。</p><p>以上过程可以用下面的图表示：
+$$
+\rlap{
+\underbrace{
+\phantom{
+s_0 \dots s_{i - l} \dots s_i \dots s_{r - l} \dots}}_\text{same}
+}
+s_0 \dots s_{i - l} \dots
+\overbrace{
+s_l \dots s_i \dots s_{r - l} \dots s_r}^\text{same}
+\dots
+$$</p><p>由于$r$只增不减，Z 算法的时间复杂度为$O(n)$。</p><p>参考代码（<code>std::string</code>，字符串下标从<code>0</code>开始）：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-cpp data-lang=cpp><span class=kt>void</span> <span class=nf>ZAlgorithm</span><span class=p>(</span><span class=k>const</span> <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=o>&amp;</span><span class=n>str</span><span class=p>)</span>
+<span class=p>{</span>
+    <span class=kt>int</span> <span class=n>len</span> <span class=o>=</span> <span class=n>str</span><span class=p>.</span><span class=n>length</span><span class=p>();</span>
+    <span class=n>z</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>,</span> <span class=n>l</span> <span class=o>=</span> <span class=mi>0</span><span class=p>,</span> <span class=n>r</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>len</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+    <span class=p>{</span>
+        <span class=kt>int</span> <span class=n>k</span> <span class=o>=</span> <span class=n>z</span><span class=p>[</span><span class=n>i</span> <span class=o>-</span> <span class=n>l</span><span class=p>];</span>
+        <span class=k>if</span> <span class=p>(</span><span class=n>i</span> <span class=o>&lt;=</span> <span class=n>r</span> <span class=o>&amp;&amp;</span> <span class=n>k</span> <span class=o>&lt;</span> <span class=n>r</span> <span class=o>-</span> <span class=n>i</span> <span class=o>+</span> <span class=mi>1</span><span class=p>)</span>
+            <span class=n>z</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=n>k</span><span class=p>;</span>
+        <span class=k>else</span>
+        <span class=p>{</span>
+            <span class=n>k</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>max</span><span class=p>(</span><span class=n>r</span> <span class=o>-</span> <span class=n>i</span> <span class=o>+</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+            <span class=k>while</span> <span class=p>(</span><span class=n>i</span> <span class=o>+</span> <span class=n>k</span> <span class=o>&lt;</span> <span class=n>len</span> <span class=o>&amp;&amp;</span> <span class=n>str</span><span class=p>[</span><span class=n>i</span> <span class=o>+</span> <span class=n>k</span><span class=p>]</span> <span class=o>==</span> <span class=n>str</span><span class=p>[</span><span class=n>k</span><span class=p>])</span>
+                <span class=n>k</span><span class=o>++</span><span class=p>;</span>
+            <span class=n>z</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=n>k</span><span class=p>;</span>
+        <span class=p>}</span>
+
+        <span class=k>if</span> <span class=p>(</span><span class=n>i</span> <span class=o>+</span> <span class=n>k</span> <span class=o>-</span> <span class=mi>1</span> <span class=o>&gt;</span> <span class=n>r</span><span class=p>)</span>
+        <span class=p>{</span>
+            <span class=n>l</span> <span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+            <span class=n>r</span> <span class=o>=</span> <span class=n>i</span> <span class=o>+</span> <span class=n>k</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
+        <span class=p>}</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><h3 id=z-算法的扩展>Z 算法的扩展</h3><p>有些时候，我们需要求某个字符串与另一个字符串后缀的最长公共前缀，该问题的解决方法同上，只是匹配时不再进行自身比较，而是文本串（的后缀）和模式串进行比较。</p><p>但要注意三个细节：</p><ul><li>仍然要取<code>z[i - l]</code>（这意味着要先对文本串做 Z 算法）。因为上面用于加速算法的性质是针对一个字符串的，不能用新的代替。</li><li>匹配时注意边界，文本串和模式串都要判断。</li><li>单独处理$z_0$。单个字符串与自己的最大公共前缀一定是它的长度（Z 函数中只是定义为$0$）扩展处理时如果不定义$z_0 = 0$，应当从头枚举计算$z_0$。</li></ul><p>参考代码（<code>std::string</code>，字符串下标从<code>0</code>开始）：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-cpp data-lang=cpp><span class=c1>// `prev` means the `z` of `text`.
+</span><span class=c1></span><span class=kt>void</span> <span class=nf>ExZAlgorithm</span><span class=p>(</span><span class=k>const</span> <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=o>&amp;</span><span class=n>text</span><span class=p>,</span> <span class=k>const</span> <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=o>&amp;</span><span class=n>pattern</span><span class=p>)</span>
+<span class=p>{</span>
+    <span class=kt>int</span> <span class=n>tLen</span> <span class=o>=</span> <span class=n>text</span><span class=p>.</span><span class=n>length</span><span class=p>(),</span> <span class=n>pLen</span> <span class=o>=</span> <span class=n>pattern</span><span class=p>.</span><span class=n>length</span><span class=p>();</span>
+    <span class=n>z</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>min</span><span class=p>(</span><span class=n>tLen</span><span class=p>,</span> <span class=n>pLen</span><span class=p>);</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+    <span class=p>{</span>
+        <span class=k>if</span> <span class=p>(</span><span class=n>text</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>==</span> <span class=n>pattern</span><span class=p>[</span><span class=n>i</span><span class=p>])</span>
+            <span class=n>z</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>++</span><span class=p>;</span>
+        <span class=k>else</span>
+            <span class=k>break</span><span class=p>;</span>
+    <span class=p>}</span>
+
+    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>,</span> <span class=n>l</span> <span class=o>=</span> <span class=mi>0</span><span class=p>,</span> <span class=n>r</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>tLen</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span>
+    <span class=p>{</span>
+        <span class=kt>int</span> <span class=n>k</span> <span class=o>=</span> <span class=n>prev</span><span class=p>[</span><span class=n>i</span> <span class=o>-</span> <span class=n>l</span><span class=p>];</span> <span class=c1>// not `z`.
+</span><span class=c1></span>        <span class=k>if</span> <span class=p>(</span><span class=n>i</span> <span class=o>&lt;=</span> <span class=n>r</span> <span class=o>&amp;&amp;</span> <span class=n>k</span> <span class=o>&lt;</span> <span class=n>r</span> <span class=o>-</span> <span class=n>i</span> <span class=o>+</span> <span class=mi>1</span><span class=p>)</span>
+            <span class=n>z</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=n>k</span><span class=p>;</span>
+        <span class=k>else</span>
+        <span class=p>{</span>
+            <span class=n>k</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>max</span><span class=p>(</span><span class=n>r</span> <span class=o>-</span> <span class=n>i</span> <span class=o>+</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+            <span class=k>while</span> <span class=p>(</span><span class=n>i</span> <span class=o>+</span> <span class=n>k</span> <span class=o>&lt;</span> <span class=n>tLen</span> <span class=o>&amp;&amp;</span> <span class=n>k</span> <span class=o>&lt;</span> <span class=n>pLen</span> <span class=o>&amp;&amp;</span> <span class=n>text</span><span class=p>[</span><span class=n>i</span> <span class=o>+</span> <span class=n>k</span><span class=p>]</span> <span class=o>==</span> <span class=n>pattern</span><span class=p>[</span><span class=n>k</span><span class=p>])</span>
+                <span class=n>k</span><span class=o>++</span><span class=p>;</span>
+            <span class=n>z</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=n>k</span><span class=p>;</span>
+        <span class=p>}</span>
+
+        <span class=k>if</span> <span class=p>(</span><span class=n>i</span> <span class=o>+</span> <span class=n>k</span> <span class=o>-</span> <span class=mi>1</span> <span class=o>&gt;</span> <span class=n>r</span><span class=p>)</span>
+        <span class=p>{</span>
+            <span class=n>l</span> <span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+            <span class=n>r</span> <span class=o>=</span> <span class=n>i</span> <span class=o>+</span> <span class=n>k</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
+        <span class=p>}</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2021-11-17</span></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/z-algorithm/index.md target=_blank>Read Markdown</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://www.pigaunt.top/z-algorithm/ data-title="Z 函数及其求法（扩展 KMP）" data-hashtags=字符串,动态规划><i class="fab fa-twitter fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://www.pigaunt.top/z-algorithm/ data-hashtag=字符串><i class="fab fa-facebook-square fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Hacker News" data-sharer=hackernews data-url=https://www.pigaunt.top/z-algorithm/ data-title="Z 函数及其求法（扩展 KMP）"><i class="fab fa-hacker-news fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://www.pigaunt.top/z-algorithm/ data-title="Z 函数及其求法（扩展 KMP）"><i data-svg-src=/lib/simple-icons/icons/line.min.svg aria-hidden=true></i></a><a href=javascript:void(0); title="Share on 微博" data-sharer=weibo data-url=https://www.pigaunt.top/z-algorithm/ data-title="Z 函数及其求法（扩展 KMP）"><i class="fab fa-weibo fa-fw" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/>字符串</a>,&nbsp;<a href=/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/>动态规划</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span></section></div><div class=post-nav><a href=/palindrome-and-manacher-algorithm/ class=prev rel=prev title="回文字符串和 Manacher 算法"><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>回文字符串和 Manacher 算法</a>
+<a href=/matrix/ class=next rel=next title=矩阵乘法及应用>矩阵乘法及应用<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.83.1">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden=true></i> LoveIt</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2021 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://www.pigaunt.top target=_blank>PigAunt</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/lunr/lunr.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/contrib/auto-render.min.js></script><script type=text/javascript src=/lib/katex/contrib/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/contrib/mhchem.min.js></script><script type=text/javascript src=/lib/cookieconsent/cookieconsent.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:50},comment:{},cookieconsent:{content:{dismiss:"Got it!",link:"Learn more",message:"This website uses Cookies to improve your experience."},enable:!0,palette:{button:{background:"#f0f0f0"},popup:{background:"#1aa3ff"}},theme:"edgeless"},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},search:{highlightTag:"em",lunrIndexURL:"/index.json",maxResultLength:10,noResultsFound:"No results found",snippetLength:50,type:"lunr"}}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
