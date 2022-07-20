@@ -63,7 +63,8 @@ hasCJKLanguage = true
   # 网站描述, 用于 RSS, SEO, Open Graph 和 Twitter Cards
   description = "这是 PigAunt 的博客"
   # 网站图片, 用于 Open Graph 和 Twitter Cards
-  images = ["/logo.png"]
+  images = ["/images/favicon-32x32.png"]
+  enableEmoji = true
 
   # 页面头部导航栏配置
   [params.header]
@@ -74,7 +75,7 @@ hasCJKLanguage = true
     #  页面头部导航栏标题配置
     [params.header.title]
       # LOGO 的 URL
-      logo = "/favicon.ico"
+      logo = "/images/favicon.ico"
       # 标题名称
       name = ""
       # 你可以在名称 (允许 HTML 格式) 之前添加其他信息, 例如图标
@@ -100,7 +101,7 @@ hasCJKLanguage = true
     # ICP 备案信息，仅在中国使用 (支持 HTML 格式)
     icp = ""
     # 许可协议信息 (支持 HTML 格式)
-    license = '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
+    license = '<a rel="license external nofollow noopener noreffer" href="https://www.mozilla.org/en-US/MPL/2.0/" target="_blank">Mozilla Public License 2.0</a>'
 
   #  Section (所有文章) 页面配置
   [params.section]
@@ -125,7 +126,7 @@ hasCJKLanguage = true
     # 当添加到 iOS 主屏幕或者 Android 启动器时的标题, 覆盖默认标题
     title = "PigAunt 的博客"
     # 是否隐藏网站图标资源链接
-    noFavicon = false
+    noFavicon = true
     # 更现代的 SVG 网站图标, 可替代旧的 .png 和 .ico 文件
     svgFavicon = ""
     # Android 浏览器主题色
@@ -167,9 +168,9 @@ hasCJKLanguage = true
       # Gravatar 邮箱，用于优先在主页显示的头像
       gravatarEmail = ""
       # 主页显示头像的 URL
-      avatarURL = "/favicon-32x32.png"
+      avatarURL = "/images/favicon-32x32.png"
       #  主页显示的网站标题 (支持 HTML 格式)
-      title = ""
+      title = "PigAunt 的博客"
       # 主页显示的网站副标题 (允许 HTML 格式)
       subtitle = "这是 PigAunt 的博客"
       # 是否为副标题显示打字机动画
@@ -288,7 +289,7 @@ hasCJKLanguage = true
       # 是否使用目录
       enable = true
       #  是否保持使用文章前面的静态目录
-      keepStatic = true
+      keepStatic = false
       # 是否使侧边目录自动折叠展开
       auto = true
     #  代码配置
@@ -296,7 +297,7 @@ hasCJKLanguage = true
       # 是否显示代码块的复制按钮
       copy = true
       # 默认展开显示的代码行数
-      maxShownLines = 50
+      maxShownLines = 100
     #  KaTeX 数学公式
     [params.page.math]
       enable = true
@@ -328,23 +329,23 @@ hasCJKLanguage = true
       fullscreen = true
     #  文章页面的分享信息设置
     [params.page.share]
-      enable = true
-      Twitter = true
-      Facebook = true
+      enable = false
+      Twitter = false
+      Facebook = false
       Linkedin = false
       Whatsapp = false
       Pinterest = false
       Tumblr = false
-      HackerNews = true
+      HackerNews = false
       Reddit = false
       VK = false
       Buffer = false
       Xing = false
-      Line = true
+      Line = false
       Instapaper = false
       Pocket = false
       Flipboard = false
-      Weibo = true
+      Weibo = false
       Blogger = false
       Baidu = false
       Odnoklassniki = false
@@ -466,7 +467,7 @@ hasCJKLanguage = true
     # 光标的闪烁速度 (单位是毫秒)
     cursorSpeed = 1000
     # 光标的字符 (支持 HTML 格式)
-    cursorChar = "|"
+    cursorChar = "_"
     # 打字结束之后光标的持续时间 (单位是毫秒, "-1" 代表无限大)
     duration = -1
 
@@ -507,7 +508,7 @@ hasCJKLanguage = true
 
   #  Cookie 许可配置
   [params.cookieconsent]
-    enable = true
+    enable = false
     # 用于 Cookie 许可横幅的文本字符串
     [params.cookieconsent.content]
       message = ""
