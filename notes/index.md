@@ -101,7 +101,7 @@ $x_i$ 乘上 $a_i$， $x$ 是满足所有方程的一个特解。
 
 现在要得到一个通解，$x$ 加上 $k$ 倍的 $\mathrm{lcm}(p_1, p_2, \dots, p_n)$ 即可，而 $p$ 两两互质，所以加上 $k$ 倍的 $P$ 就行了。
 
-## ExCRT
+### ExCRT
 
 问题升级为不要求模数两两互质，也就是不一定有逆元了，因此我们采用将线性同余方程不断合并的方式，最后得到一个线性同余方程，用 ExGCD 求解（与 CRT 采用的构造法完全不同）。
 
@@ -134,7 +134,7 @@ x \equiv a \pmod p
 $$
 {{< /raw >}}
 
-可以写成等式的形式用 ExGCD 求解。时间复杂度 $\mathrm{O}(n \log_2 p)$。
+时间复杂度 $\mathrm{O}(n \log_2 p)$。
 
 ## BSGS
 
@@ -194,7 +194,7 @@ int BSGS(int a, int b, int p)
 }
 ```
 
-## ExBSGS
+### ExBSGS
 
 问题升级为不保证 $(a, p) = 1$，因此 $a$ 不一定存在模 $p$ 意义下的逆元。
 
@@ -235,6 +235,28 @@ int ExBSGS(int a, int b, int p)
     return BSGS(a, b, p);
 }
 ```
+
+### 特殊的 BSGS
+
+BSGS 还可以用来求解其它类型的简单高次方程，这里以矩阵为例：
+
+{{< raw >}}
+$$
+A^x = B
+$$
+{{< /raw >}}
+
+只要矩阵 $A$ 有逆元（$A \times A^{-1} = I$），我们可以完全套用 BSGS 的做法，只是将数改为矩阵（包括表中存储的内容）。
+
+上述算法的一个应用是求 Fibonacci 数列在模 $p$ 意义下的最小循环节 $x$，即解这个方程：
+
+{{< raw >}}
+$$
+{\begin{bmatrix} f_{i - 1} & f_i \end{bmatrix}} \times {\begin{bmatrix} 0 & 1 \cr 1 & 1 \end{bmatrix}}^x = {\begin{bmatrix} f_{i - 1} & f_i \end{bmatrix}}
+$$
+{{< /raw >}}
+
+令 $A = \begin{bmatrix} 0 & 1 \cr 1 & 1 \end{bmatrix}$，我们发现 $A$ 存在逆元 $\begin{bmatrix} -1 & 1 \cr 1 & 0 \end{bmatrix}$，可以通过上述方法求解，即代入做 BSGS 求最小解即得到最小循环节。
 
 ## 原根和阶
 
