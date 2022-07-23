@@ -343,8 +343,8 @@ void GetPrimes(int maxVal)
 由于积性函数 $f$ 满足 $\forall \gcd(x, y) = 1, f(xy) = f(x) f(y)$，那么对于一个数 $n = \prod p_i^{c_i}$，我们只需要知道每一个 $p_i^{c_i}$ 的函数值，就能得到 $n$ 的函数值，因此我们对线性筛的过程进行扩充，记录 $g_i$ 表示 $i$ 的最小质因子对应的幂（即 $p_1^{c_1}$），然后分类讨论求 $g_i$：
 
 1. 如果 $i$ 是质数，那么 $g_i = i$；
-2. 如果 $\mathrm{primes}_j \mid i$，说明应当累计 $i \times \mathrm{primes}_j$ 的最小质因子，那么 $g_{i \times \mathrm{primes}_j} = g_i \times \mathrm{primes}_j$；
-3. 如果 $\mathrm{primes}_j \nmid i$，说明枚举到了 $i \times \mathrm{primes}_j$ 的最小质因子，那么 $g_{i \times \mathrm{primes}_j} = \mathrm{primes}_j$。
+2. 如果 $\mathrm{primes}_j \mid i$，说明应当累计 {{< raw >}}$i \times \mathrm{primes}_j${{< /raw >}} 的最小质因子，那么 {{< raw >}}$g_{i \times \mathrm{primes}_j} = g_i \times \mathrm{primes}_j${{< /raw >}}；
+3. 如果 $\mathrm{primes}_j \nmid i$，说明枚举到了 {{< raw >}}$i \times \mathrm{primes}_j${{< /raw >}} 的最小质因子，那么 {{< raw >}}$g_{i \times \mathrm{primes}_j} = \mathrm{primes}_j${{< /raw >}}。
 
 现在得到了 $g_i$，那么求 $f(i)$ 的过程也可以分类讨论：
 
