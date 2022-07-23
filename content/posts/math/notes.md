@@ -417,7 +417,7 @@ $$
 
 如果 $g, h$ 的前缀和很好算，那么 $s(n)$ 就好求了。常见的 $f * g = h$ 有 $\mu * \mathrm{I} = \epsilon$，$\varphi * \mathrm{I} = \mathrm{id}$，$\mathrm{id} * \mu = \varphi$（$\mathrm{I}, \mathrm{id}$ 的前缀和都很好算）。
 
-具体流程：先线性筛预处理 $f$ 的前 $\mathrm{O}(\sqrt n)$ 项，再递归实现上述过程，并用一个表存储 $s$ 的值。
+具体流程：先线性筛预处理 $f$ 的前 $\mathrm{O}(n^{\frac 2 3})$ 项，再递归实现上述过程，并用一个表存储 $s$ 的值。
 
 下面以求 $\mu, \varphi$ 的前缀和为例（[洛谷 P4213 【模板】杜教筛（Sum）](https://www.luogu.com.cn/problem/P4213)），参考代码：
 
