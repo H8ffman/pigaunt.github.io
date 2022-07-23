@@ -275,3 +275,236 @@ $$
 结合上面阶的定义，$p$ 的原根的阶是 $\varphi(p)$，且阶为 $\varphi(p)$ 的数是 $p$ 的原根。因此要判断一个数是不是原根，我们可以验证它的阶是不是 $\varphi(p)$，但此时可以只枚举 $\frac {\varphi(p)} {x}$（$x$ 是 $p$ 的质因子，暂不能证明）。
 
 经数学家证明，一个数如果存在原根，其最小原根是较小的，因此可以用枚举找原根。
+
+## 筛法
+
+如果要找一个范围内的质数，我们采用枚举每一个数并验证的方法是不好的，因为时间复杂度太高；但如果反过来，我们把不满足条件的删掉，就可以大大加速求解过程。
+
+从 $2$ 开始枚举。当我们枚举到一个没有被标记的数时，我们确定它是一个质数；确定完一个数是不是质数后，我们标记它的倍数，流程如下：
+
+```cpp
+int primes[N], total;
+bool del[N];
+
+void GetPrimes(int maxVal)
+{
+    for (int i = 2; i <= maxVal; i++)
+    {
+        if (!del[i])
+            primes[++total] = i;
+        
+        for (int j = 1; i * primes[j] <= maxVal && j <= total; j++)
+            del[i * primes[j]] = true;
+    }
+}
+```
+
+上面的过程叫 Eratosthenes 筛法，时间复杂度 $\mathrm{O}(n \log_2 \log_2 n)$。我们发现时间复杂度的瓶颈在于一个数会被多个数标记，但我们希望一个数只被筛一次，因此我们规定：一个数只被它的最小质因子筛掉，于是有了下面的流程：
+
+```cpp
+int primes[N], total;
+bool del[N];
+
+void GetPrimes(int maxVal)
+{
+    for (int i = 2; i <= maxVal; i++)
+    {
+        if (!del[i])
+            primes[++total] = i;
+        
+        for (int j = 1; i * primes[j] <= maxVal && j <= total; j++)
+        {
+            del[i * primes[j]] = true;
+            if (i % primes[j] == 0)
+                break;
+        }
+    }
+}
+```
+
+增加的两行代码完成了这样一个事情：枚举 $\mathrm{primes}_j$ 就是在枚举最小质因子，一旦发现 $i$ 中包含了 $i \times \mathrm{primes}_j$ 的最小质因子 $\mathrm{primes}_j$，那么说明后面的数中 $\mathrm{primes}_j$ 不再是它们的最小质因子，因此直接退出。可以证明这样会不重不漏地筛掉所有合数（我证不来，欢迎指教）。这个过程叫线性筛，时间复杂度 $\mathrm{O}(n)$。
+
+### 线性筛筛积性函数
+
+由于积性函数 $f$ 满足 $\forall \gcd(x, y) = 1, f(xy) = f(x) f(y)$，那么对于一个数 $n = \prod p_i^{c_i}$，我们只需要知道每一个 $p_i^{c_i}$ 的函数值，就能得到 $n$ 的函数值，因此我们对线性筛的过程进行扩充，记录 $g_i$ 表示 $i$ 的最小质因子对应的幂（即 $p_1^{c_1}$），然后分类讨论求 $g_i$：
+
+1. 如果 $i$ 是质数，那么 $g_i = i$；
+2. 如果 $\mathrm{primes}_j \mid i$，说明应当累计 $i \times \mathrm{primes}_j$ 的最小质因子，那么 $g_{i \times \mathrm{primes}_j} = g_i \times \mathrm{primes}_j$；
+3. 如果 $\mathrm{primes}_j \nmid i$，说明枚举到了 $i \times \mathrm{primes}_j$ 的最小质因子，那么 $g_{i \times \mathrm{primes}_j} = \mathrm{primes}_j$。
+
+现在得到了 $g_i$，那么求 $f(i)$ 的过程也可以分类讨论：
+
+1. 如果 $g_i = i$，说明 $i$ 是质数，按 $f$ 的定义直接求（数论函数一般在质数上的函数值都很好求，因为因子只有 $1$ 和自己）；
+2. 如果 $\mathrm{primes}_j \nmid i$，那么它们互质，可以根据积性函数的性质，$f(i \times \mathrm{primes}_j) = f(i) \times f(\mathrm{primes}_j)$；
+3. 如果 $\mathrm{primes}_j \mid i$，我们继续讨论：
+    1. 如果 $g_i = i$，那么这是两个质数相乘的情况，直接求；
+    2. 否则说明是往 $i$ 上累加一个质数 $\mathrm{primes}_j$，我们调整成两个质数的函数值相乘的情况，即 $f(i \times \mathrm{primes}_j) = f(\frac {i} {g_i}) \times f(g_i \times \mathrm{primes}_j)$。
+   
+现在我们以 $f = \mu * \mathrm{id}_k$ 的求值为例，参考代码：
+
+```cpp
+int f[N + 5], g[N + 5];
+int primes[N + 5], total;
+
+void GetPrimes(int maxVal)
+{
+    f[1] = g[1] = 1;
+    for (int i = 2; i <= maxVal; i++)
+    {
+        if (g[i] == 0)
+        {
+            primes[++total] = i;
+            f[i] = FastPow(i, K) - 1;
+            g[i] = i;
+        }
+
+        for (int j = 1; i * primes[j] <= maxVal; j++)
+        {
+            if (i % primes[j] == 0)
+            {
+                if (g[i] == i) // p^{nk} * (p^k - 1).
+                    f[i * primes[j]] = (long long)f[i] * (f[primes[j]] + 1) % MOD;
+                else
+                    f[i * primes[j]] = (long long)f[i / g[i]] * f[primes[j] * g[i]] % MOD;
+                g[i * primes[j]] = g[i] * primes[j];
+                break;
+            }
+
+            f[i * primes[j]] = (long long)f[i] * f[primes[j]] % MOD;
+            g[i * primes[j]] = primes[j];
+        }
+    }
+}
+```
+
+对于一些特殊的积性函数（如 $\varphi$，$\mu$），我们不必这么麻烦，可以利用它自己的特殊性质，修改线性筛的过程求值。
+
+### 杜教筛
+
+有时我们不需要得到积性函数的值，而是它的前缀和，在线性筛 $\mathrm{O}(n)$ 的基础上，杜教筛可以在 $\mathrm{O}(n^{\frac 2 3})$ 的时间内求得积性函数的前缀和。
+
+令 $s(n) = \sum_{i = 1}^n f(i)$，若 $f * g = h$，那么：
+
+{{< raw >}}
+$$
+\sum_{i = 1}^n h(n) = \sum_{i = 1}^n \sum_{d \mid i} f(d) g(\frac i d) \\
+= \sum_{d = 1}^n g(d) \sum_{i = 1}^{\lfloor \frac n d \rfloor} f(i) \\ 
+= g(1)s(n) + \sum_{d = 2}^n g(d) s(\lfloor \frac n d \rfloor)
+$$
+{{< /raw >}}
+
+移项后得到：
+
+{{< raw >}}
+$$
+g(1)s(n) = \sum_{i = 1}^n h(i) - \sum_{d = 2}^n g(d) s(\lfloor \frac n d \rfloor)
+$$
+{{< /raw >}}
+
+如果 $g, h$ 的前缀和很好算，那么 $s(n)$ 就好求了。常见的 $f * g = h$ 有 $\mu * \mathrm{I} = \epsilon$，$\varphi * \mathrm{I} = \mathrm{id}$，$\mathrm{id} * \mu = \varphi$（$\mathrm{I}, \mathrm{id}$ 的前缀和都很好算）。
+
+具体流程：先线性筛预处理 $f$ 的前 $\mathrm{O}(\sqrt n)$ 项，再递归实现上述过程，并用一个表存储 $s$ 的值。
+
+下面以求 $\mu, \varphi$ 的前缀和为例（[洛谷 P4213 【模板】杜教筛（Sum）](https://www.luogu.com.cn/problem/P4213)），参考代码：
+
+```cpp
+#include <iostream>
+#include <map>
+
+const int M = 1e6;
+
+struct Info
+{
+    long long mu, phi;
+    Info()
+    {
+        mu = phi = 0;
+    }
+    Info(long long _mu, long long _phi)
+        : mu(_mu), phi(_phi) {}
+
+    Info operator+(const Info &x) const
+    {
+        return {mu + x.mu, phi + x.phi};
+    }
+    Info operator-(const Info &x) const
+    {
+        return {mu - x.mu, phi - x.phi};
+    }
+    Info operator*(const long long x) const
+    {
+        return {mu * x, phi * x};
+    }
+} val[M + 5], bSum[M + 5];
+
+int primes[M + 5], total;
+bool del[M + 5];
+std::map<long long, Info> sum;
+
+void GetPrimes(int maxVal)
+{
+    val[1].phi = val[1].mu = 1;
+    for (int i = 2; i <= maxVal; i++)
+    {
+        Info &u = val[i];
+        if (!del[i])
+        {
+            primes[++total] = i;
+            u.mu = -1;
+            u.phi = i - 1;
+        }
+
+        for (int j = 1; i * primes[j] <= maxVal; j++)
+        {
+            del[i * primes[j]] = true;
+            Info &v = val[i * primes[j]];
+            if (i % primes[j] == 0)
+            {
+                v.phi = u.phi * primes[j];
+                v.mu = 0;
+                break;
+            }
+            v.phi = u.phi * (primes[j] - 1);
+            v.mu = -u.mu;
+        }
+    }
+
+    bSum[1] = val[1];
+    for (int i = 2; i <= maxVal; i++)
+        bSum[i] = bSum[i - 1] + val[i];
+}
+
+Info GetSum(long long x)
+{
+    if (x <= M)
+        return bSum[x];
+    if (sum.count(x) > 0)
+        return sum[x];
+    
+    Info res(0, 0);
+    res.mu = 1, res.phi = (long long)x * (x + 1) / 2;
+    for (long long l = 2, r = 0; l <= x && r <= x; l = r + 1)
+    {
+        r = x / (x / l);
+        res = res - GetSum(x / l) * (r - l + 1);
+    }
+    sum[x] = res;
+    return res;
+}
+
+int main()
+{
+    std::ios::sync_with_stdio(false);
+
+    int T, n;
+    std::cin >> T;
+    GetPrimes(M);
+    for (int test = 1; test <= T; test++)
+    {
+        std::cin >> n;
+        Info res = GetSum(n);
+        std::cout << res.phi << ' ' << res.mu << '\n';
+    }
+    return 0;
+}
+```
